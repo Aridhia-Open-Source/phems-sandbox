@@ -10,6 +10,11 @@ dependencies = [
     "python-dotenv",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "dagster-webserver",
+]
+
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
@@ -19,13 +24,13 @@ requires = [
 
 [tool.setuptools.packages.find]
 where = ["app"]
+exclude = ["app/tests"]
 
-[project.scripts]
-main = "app.main"
+[tool.dagster]
+module_name = "app.definitions"
+code_location_name = "app"
 
 [tool.pytest.ini_options]
 pythonpath = ["app"]
 addopts = "-p no:cacheprovider"
 
-[tool.setuptools]
-py-modules = []
