@@ -8,6 +8,7 @@ dependencies = [
     "dagster",
     "pytest",
     "python-dotenv",
+    "pandas",
 ]
 
 [project.optional-dependencies]
