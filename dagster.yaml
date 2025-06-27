@@ -1,0 +1,9 @@
+run_launcher:
+  module: dagster_celery
+  class: CeleryDockerRunLauncher
+  config:
+    image: phems-user-code
+    broker: 'pyamqp://guest@rabbitmq//'
+    backend: 'rpc://'
+    env:
+      DAGSTER_CURRENT_IMAGE: 'phems-dagster'
