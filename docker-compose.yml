@@ -1,4 +1,3 @@
-version: '3.7'
 name: phems-dagster
 
 services:
@@ -11,6 +10,10 @@ services:
       POSTGRES_DB: 'postgres_db'
     networks:
       - phems-network
+    volumes:
+      - dagster_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres_user -d postgres_db']
       interval: 5s
@@ -40,21 +43,22 @@ services:
     networks:
       - phems-network
     volumes:
-      # bind dagster home
       - ./app:/opt/dagster/home/app
+    command: >
+      dagster code-server start
+      -h 0.0.0.0
+      -p 4000
+      -f definitions.py
 
   webserver:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint:
-      - dagster-webserver
-      - -h
-      - '0.0.0.0'
-      - -p
-      - '3000'
-      - -w
-      - workspace.yaml
+    command: >
+      dagster-webserver
+      -h 0.0.0.0
+      -p 3000
+      -w workspace.yaml
     expose:
       - '3000'
     ports:
@@ -64,11 +68,10 @@ services:
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
     volumes:
-      # Make docker client accessible so we can terminate containers from the webserver
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
-      # bind dagster home
       - ./app:/opt/dagster/home/app
+      - dagster_artifacts:/opt/dagster/home/artifacts
     networks:
       - phems-network
     depends_on:
@@ -80,7 +83,7 @@ services:
   daemon:
     build:
       context: .
-      dockerfile: ./Dockerfile_dagster
+      dockerfile: Dockerfile
     entrypoint:
       - dagster-daemon
       - run
@@ -90,11 +93,10 @@ services:
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
     volumes:
-      # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
-      # bind dagster home
       - ./app:/opt/dagster/home/app
+      - dagster_artifacts:/opt/dagster/home/artifacts
     networks:
       - phems-network
     depends_on:
@@ -107,7 +109,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A your_project.celery worker --loglevel=INFO
+    command: celery -A app.worker worker --loglevel=INFO
     environment:
       DAGSTER_CURRENT_IMAGE: 'phems-dagster'
       DAGSTER_CELERY_BROKER_URL: 'pyamqp://guest@rabbitmq//'
@@ -116,7 +118,6 @@ services:
     depends_on:
       - rabbitmq
     volumes:
-      # bind dagster home
       - ./app:/opt/dagster/home/app
 
   flower:
@@ -130,8 +131,13 @@ services:
       - phems-network
     depends_on:
       - rabbitmq
+      - postgres
 
 networks:
   phems-network:
     driver: bridge
     name: phems-network
+
+volumes:
+  dagster_postgres_data:
+  dagster_artifacts:

@@ -6,9 +6,12 @@ version = "0.1.0"
 requires-python = ">=3.6"
 dependencies = [
     "dagster",
-    "dagster-celery",
-    "dagster-celery[rabbitmq]",
     "celery",
+    "dagster-postgres",
+    "dagster-webserver",
+    "dagster-celery",
+    "dagster-celery-k8s",
+    "dagster-celery[rabbitmq]",
     "pytest",
     "python-dotenv",
     "pandas",
