@@ -1,32 +1,11 @@
 storage:
   postgres:
     postgres_db:
-      username: postgres_user
-      password: postgres_password
-      hostname: postgres
-      db_name: postgres_db
-      port: 5432
-
-local_artifact_storage:
-  module: dagster.core.storage.root
-  class: LocalArtifactStorage
-  config:
-    base_dir: '/opt/dagster/home/artifacts'
-
-execution:
-  celery:
-    module: dagster_celery.executor
-    class: CeleryExecutor
-    config:
-      broker: 'pyamqp://guest@rabbitmq//'
-      backend: 'db+postgresql://postgres_user:postgres_password@postgres/postgres_db'
-
-# run_launcher:
-#   module: dagster_celery
-#   class: CeleryRunLauncher
-#   config:
-#     image: phems-user-code
-#     broker: 'pyamqp://guest@rabbitmq//'
-#     backend: 'db+postgresql://postgres_user:postgres_password@postgres/postgres_db'
-#     env:
-#       DAGSTER_CURRENT_IMAGE: 'phems-dagster'
+        username: postgres_user
+        password: postgres_password
+        hostname: postgres
+        db_name: postgres_db
+        port: 5432
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: QueuedRunCoordinator

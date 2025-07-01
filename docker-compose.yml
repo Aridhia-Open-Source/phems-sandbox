@@ -26,8 +26,36 @@ services:
     ports:
       - "5672:5672"     # AMQP
       - "15672:15672"   # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: rabbit
     networks:
       - phems-network
+    volumes:
+      - dagster_rabbitmq_data:/var/lib/rabbitmq
+
+  # test-rabbitmq-client:
+  #   image: python:3
+  #   container_name: test-rabbitmq-client
+  #   depends_on:
+  #     - rabbitmq
+  #   networks:
+  #     - phems-network
+  #   command: bash -c "pip install pika && python -c \"import pika; connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq', credentials=pika.PlainCredentials('rabbit', 'rabbit'))); print('Connection successful'); connection.close()\""
+
+  # minio:
+  #   image: minio/minio
+  #   container_name: minio
+  #   ports:
+  #     - '9000:9000'
+  #   volumes:
+  #     - dagster_minio_storage:/data
+  #   environment:
+  #     MINIO_ACCESS_KEY: 'minio'
+  #     MINIO_SECRET_KEY: 'miniosecret'
+  #   command: 'server /data'
+  #   networks:
+  #     - phems-network
 
   codeserver:
     build:
@@ -35,11 +63,11 @@ services:
       dockerfile: Dockerfile
     image: phems-dagster
     restart: always
+    container_name: codeserver
     environment:
       DAGSTER_POSTGRES_USER: 'postgres_user'
       DAGSTER_POSTGRES_PASSWORD: 'postgres_password'
       DAGSTER_POSTGRES_DB: 'postgres_db'
-      DAGSTER_CURRENT_IMAGE: 'phems-dagster'
     networks:
       - phems-network
     volumes:
@@ -48,12 +76,13 @@ services:
       dagster code-server start
       -h 0.0.0.0
       -p 4000
-      -f definitions.py
+      -f app/definitions.py
 
   webserver:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: webserver
     command: >
       dagster-webserver
       -h 0.0.0.0
@@ -71,7 +100,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
       - ./app:/opt/dagster/home/app
-      - dagster_artifacts:/opt/dagster/home/artifacts
     networks:
       - phems-network
     depends_on:
@@ -84,9 +112,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint:
-      - dagster-daemon
-      - run
+    container_name: daemon
+    command: >
+      dagster-daemon run
     restart: on-failure
     environment:
       DAGSTER_POSTGRES_USER: 'postgres_user'
@@ -96,37 +124,43 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
       - ./app:/opt/dagster/home/app
-      - dagster_artifacts:/opt/dagster/home/artifacts
     networks:
       - phems-network
     depends_on:
       postgres:
         condition: service_healthy
-      webserver:
-        condition: service_started
 
   worker:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A app.worker worker --loglevel=INFO
-    environment:
-      DAGSTER_CURRENT_IMAGE: 'phems-dagster'
-      DAGSTER_CELERY_BROKER_URL: 'pyamqp://guest@rabbitmq//'
+    container_name: worker
+    command: >
+      dagster-celery worker start
+      --app app.worker
+      --config-yaml celery.yaml
+      --loglevel=info
+      --queue=dagster
     networks:
       - phems-network
     depends_on:
       - rabbitmq
+      - postgres
+      # - minio
     volumes:
       - ./app:/opt/dagster/home/app
 
   flower:
     image: mher/flower
     container_name: flower
-    environment:
-      - CELERY_BROKER_URL=amqp://guest@rabbitmq//
+    command: celery flower --config-yaml celery.yaml
+    # environment:
+    #   - CELERY_BROKER_URL="amqp://rabbit:rabbit@rabbitmq:5672//"
+    #   - CELERY_RESULT_BACKEND="db+postgresql://postgres_user:postgres_password@postgres/postgres_db"
     ports:
       - "5555:5555"
+    volumes:
+      - ./app:/opt/dagster/home/app
     networks:
       - phems-network
     depends_on:
@@ -140,4 +174,5 @@ networks:
 
 volumes:
   dagster_postgres_data:
-  dagster_artifacts:
+  dagster_rabbitmq_data:
+  # dagster_minio_storage:

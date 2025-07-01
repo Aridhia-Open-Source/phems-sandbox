@@ -3,18 +3,19 @@ name = "phems-sandbox"
 description = "A PHEMS sandbox repository for testing and development purposes."
 authors = [{ name = "George Eddie", email = "george.eddie@aridhia.com" }]
 version = "0.1.0"
-requires-python = ">=3.6"
+requires-python = ">=3.11"
 dependencies = [
     "dagster",
     "celery",
+    "flower",
+    "pytest",
+    "pandas",
+    "requests",
+    "rabbitmq",
+    "python-dotenv",
+    "dagster-celery",
     "dagster-postgres",
     "dagster-webserver",
-    "dagster-celery",
-    "dagster-celery-k8s",
-    "dagster-celery[rabbitmq]",
-    "pytest",
-    "python-dotenv",
-    "pandas",
 ]
 
 [project.optional-dependencies]

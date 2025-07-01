@@ -4,7 +4,7 @@ from dagster_celery.tasks import create_task
 
 app = Celery(
     'dagster',
-    broker_url='pyamqp://guest@rabbitmq//',
+    broker_url='pyamqp://rabbit:rabbit@rabbitmq:5672//',
     backend='db+postgresql://postgres_user:postgres_password@postgres/postgres_db',
     include=['app.definitions'],
     task_serializer='json',
