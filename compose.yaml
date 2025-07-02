@@ -40,7 +40,7 @@ services:
       - |
         rabbitmq-server &
         sleep 5
-        rabbitmqctl set_permissions -p / rabbit '.*' '.*' '.*'
+        rabbitmqctl set_permissions -p / dagster rabbit '.*' '.*' '.*'
         wait
 
 
@@ -92,19 +92,19 @@ services:
     command: >
       dagster-celery worker start
       --app app.worker
-      --config-yaml celery.yaml
       --loglevel info
       --queue dagster
     volumes:
       - ./app:/opt/dagster/home/app
       - ./dagster.yaml:/opt/dagster/home/dagster.yaml:ro
-      - ./celery.yaml:/opt/dagster/home/celery.yaml:ro
     networks:
       - phems-network
     depends_on:
-      - rabbitmq
-      - postgres
-      # - minio
+      postgres:
+        condition: service_healthy
+      codeserver:
+        condition: service_started
+      # minio
 
   dagit:
     build:
@@ -135,7 +135,7 @@ services:
     image: mher/flower
     container_name: flower
     environment:
-      - CELERY_BROKER_URL=pyamqp://rabbit:rabbit@rabbitmq:5672/dagster
+      - CELERY_BROKER_URL=amqp://rabbit:rabbit@rabbitmq:5672/dagster
       - CELERY_RESULT_BACKEND=db+postgresql://postgres_user:postgres_password@postgres/postgres_db
     ports:
       - "5555:5555"
