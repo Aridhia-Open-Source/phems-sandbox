@@ -1,23 +1,24 @@
 import dagster as dg
-import dagster_celery
-
+from dagster_celery.executor import celery_executor
 from app import assets
 
-# Load asset(s)
-all_assets = dg.load_assets_from_modules([assets])
-executor_def = dagster_celery.celery_executor.configured({
-    "broker": "pyamqp://rabbit:rabbit@rabbitmq:5672//",
+# Configure Celery executor
+celery_executor_configured = celery_executor.configured({
+    "broker": "pyamqp://rabbit:rabbit@rabbitmq:5672/dagster",
     "backend": "db+postgresql://postgres_user:postgres_password@postgres/postgres_db",
+    "include": ["app.definitions"]
 })
 
-# Define a job that targets the asset
-processed_data_job = dg.define_asset_job(
-    name="processed_data_job",
-    selection=["processed_data"],
-    executor_def=executor_def
-)
+# Load assets
+all_assets = dg.load_assets_from_modules([assets])
 
-# Register both assets and job
+
+# Pull the asset into a job manually
+@dg.job(executor_def=celery_executor_configured)
+def processed_data_job():
+    assets.processed_data()
+
+
 defs = dg.Definitions(
     assets=all_assets,
     jobs=[processed_data_job],

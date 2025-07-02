@@ -1,11 +1,16 @@
 storage:
   postgres:
     postgres_db:
-        username: postgres_user
-        password: postgres_password
-        hostname: postgres
-        db_name: postgres_db
-        port: 5432
+      db_name: postgres_db
+      username: postgres_user
+      password: postgres_password
+      hostname: postgres
+      port: 5432
+
+scheduler:
+  module: dagster.core.scheduler
+  class: DagsterDaemonScheduler
+
 run_coordinator:
   module: dagster.core.run_coordinator
   class: QueuedRunCoordinator
