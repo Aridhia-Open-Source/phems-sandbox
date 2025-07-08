@@ -16,7 +16,9 @@ all_assets = dg.load_assets_from_modules([assets])
 # Pull the asset into a job manually
 @dg.job(executor_def=celery_executor_configured)
 def processed_data_job():
-    assets.processed_data()
+    assets.processed_data_1()
+    assets.processed_data_2()
+    assets.processed_data_3()
 
 
 defs = dg.Definitions(
