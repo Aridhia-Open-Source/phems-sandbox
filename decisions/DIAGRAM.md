@@ -8,48 +8,47 @@ config:
   theme: redux-dark
 ---
 flowchart TD
- subgraph GitRepos["Git Repos"]
-        NodeRepo("Node Repo")
-        CodeRepo("Code Repo")
+  subgraph GitRepos["Git Repos"]
+    NodeRepo("Node Repo")
+    CodeRepo("Code Repo")
   end
- subgraph FederatedNode["Federated Node"]
-        ArgoPipelines["ArgoPipelines"]
-        DagsterK8s["Dagster"]
-        CodeMount["CodeMount"]
+
+  subgraph FederatedNode["Federated Node"]
+    subgraph ArgoPipelines["ArgoCD Pipelines"]
+      NodePipeline("Node Pipeline")
+      CodePipeline("Code Pipeline")
+    end
+
+    subgraph DagsterK8s["Dagster K8s"]
+      subgraph DagsterWorkers["Workers"]
+        K8sPod1("Pod")
+        K8sPod2("Pod")
+        K8sPod3("Pod")
+      end
+
+      subgraph DagsterServices["Services"]
+        Daemon("Daemon")
+        CodeServer("CodeServer")
+        WebServer("WebServer")
+      end
+    end
+
+    CodeMount("Code Mount")
+
+    subgraph DagsterResources["Resources"]
+      ArtifactStorage("Minio Artifact Storage")
+      ResultsBackend("Postgres Results Backend")
+      CeleryBroker("RabbitMQ Message Broker")
+    end
   end
- subgraph ArgoPipelines["ArgoCD Pipelines"]
-        NodePipeline["Node Pipeline"]
-        CodePipeline["Code Pipeline"]
-  end
- subgraph DagsterK8s["Dagster K8s"]
-        DagsterWorkers["DagsterWorkers"]
-        DagsterServices["DagsterServices"]
-  end
- subgraph DagsterServices["Services"]
-        Daemon["Daemon"]
-        Minio["Minio"]
-        CodeServer["CodeServer"]
-        WebServer["WebServer"]
-  end
- subgraph DagsterWorkers["Workers"]
-        Pod1("Pod")
-        Pod2("Pod")
-        Pod3("Pod")
-  end
- subgraph SharedResources["Shared Resources"]
-        SharedBackend("Postgres Backend")
-        SharedBroker("RabbitMQ Broker")
-        AssetStorage("Blob Asset Storage")
-  end
-    CodeRepo --> CodePipeline
-    NodeRepo --> NodePipeline
-    NodePipeline --> DagsterK8s
-    CodePipeline --> CodeMount
-    CodeMount --- CodeServer
-    SharedResources --- FederatedNode
-    NodePipeline@{ shape: rounded}
-    CodePipeline@{ shape: rounded}
-    Daemon@{ shape: rounded}
-    CodeServer@{ shape: rounded}
-    WebServer@{ shape: rounded}
+
+  ResultsStorage("Abstract Persistent Storage")
+
+  CodeRepo --> CodePipeline
+  NodeRepo --> NodePipeline
+  NodePipeline --> DagsterK8s
+  CodePipeline --> CodeMount
+  CodeMount --- CodeServer
+  DagsterK8s --- DagsterResources
+  ArtifactStorage --> ResultsStorage
 ```
