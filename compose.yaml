@@ -43,7 +43,6 @@ services:
         rabbitmqctl set_permissions -p / dagster rabbit '.*' '.*' '.*'
         wait
 
-
   codeserver:
     build:
       context: .
