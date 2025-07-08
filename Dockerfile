@@ -7,5 +7,5 @@ WORKDIR $DAGSTER_HOME
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY dagster.yaml workspace.yaml celery.yaml ./
+COPY dagster.yaml workspace.yaml
 COPY app/ app/
