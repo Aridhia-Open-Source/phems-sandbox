@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dagit
+  namespace: dagster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dagit
+  template:
+    metadata:
+      labels:
+        app: dagit
+    spec:
+      containers:
+        - name: dagit
+          image: "phems-dagster:latest"
+          command: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "-w", "workspace.yaml"]
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: dagster-config
+              mountPath: /opt/dagster/home/dagster.yaml
+              subPath: dagster.yaml
+      volumes:
+        - name: dagster-config
+          configMap:
+            name: dagster-instance

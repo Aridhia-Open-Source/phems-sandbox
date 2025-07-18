@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dagster-instance
+  namespace: dagster
+binaryData:
+  dagster.yaml: !!binary |
+    # this section will be populated automatically below

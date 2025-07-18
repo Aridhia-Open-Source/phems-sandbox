@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-ingress
+  namespace: dagster
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /minio
+            pathType: Prefix
+            backend:
+              service:
+                name: minio
+                port:
+                  number: 9001

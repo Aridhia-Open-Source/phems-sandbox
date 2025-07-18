@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower
+  namespace: dagster
+spec:
+  selector:
+    app: flower
+  ports:
+    - protocol: TCP
+      port: 5555
+      targetPort: 5555
+      nodePort: 3055
+  type: NodePort

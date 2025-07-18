@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flower
+  namespace: dagster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flower
+  template:
+    metadata:
+      labels:
+        app: flower
+    spec:
+      containers:
+        - name: flower
+          image: mher/flower
+          ports:
+            - containerPort: 5555
+          env:
+            - name: CELERY_BROKER_URL
+              value: "amqp://rabbit:rabbit@rabbitmq:5672/dagster"
+            - name: CELERY_RESULT_BACKEND
+              value: "db+postgresql://postgres_user:postgres_password@postgres/postgres_db"
