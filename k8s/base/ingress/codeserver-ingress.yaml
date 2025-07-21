@@ -3,6 +3,9 @@ kind: Ingress
 metadata:
   name: codeserver-ingress
   namespace: dagster
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/enable-admission-webhook: "false"
 spec:
   rules:
     - host: codeserver.example.com
