@@ -1,6 +1,6 @@
-alembic==1.16.2 \
-    --hash=sha256:5f42e9bd0afdbd1d5e3ad856c01754530367debdebf21ed6894e34af52b3bb03 \
-    --hash=sha256:e53c38ff88dadb92eb22f8b150708367db731d58ad7e9d417c9168ab516cbed8
+alembic==1.16.4 \
+    --hash=sha256:b05e51e8e82efc1abd14ba2af6392897e145930c3e0a2faf2b0da2f7f7fd660d \
+    --hash=sha256:efab6ada0dd0fae2c92060800e0bf5c1dc26af15a10e02fb4babff164b4725e2
     # via dagster
 amqp==5.3.1 \
     --hash=sha256:43b3319e1b4e7d1251833a93d672b4af1e40f3d632d479b98661a95f117880a2 \
@@ -40,9 +40,9 @@ celery==5.5.3 \
     #   dagster-celery
     #   flower
     #   phems-sandbox (setup.py)
-certifi==2025.6.15 \
-    --hash=sha256:2e0c7ce7cb5d8f8634ca55d2ba7e6ec2689a2fd6537d8dec1296a477a4910057 \
-    --hash=sha256:d747aa5a8b9bbbb1bb8c22bb13e22bd1f18e9796defa16bab421f7f7a317323b
+certifi==2025.7.14 \
+    --hash=sha256:6b31f564a415d79ee77df69d757bb49a5bb53bd9f756cbbe24394ffd6fc1f4b2 \
+    --hash=sha256:8ea99dbdfaaf2ba2f9bac77b9249ef62ec5218e7c2b2e903378ed5fccf765995
     # via
     #   kubernetes
     #   requests
@@ -237,9 +237,9 @@ coloredlogs==14.0 \
     --hash=sha256:346f58aad6afd48444c2468618623638dadab76e4e70d5e10822676f2d32226a \
     --hash=sha256:a1fab193d2053aa6c0a97608c4342d031f1f93a3d1218432c59322441d31a505
     # via dagster
-dagster==1.11.1 \
-    --hash=sha256:11ccd9724104c3d940be922e0b7853abdb299fed82099326056fdb4f4e30acd1 \
-    --hash=sha256:9b8ad15b690af6bbe766caa46b8ea76551ece39ac82752f1f38f284077df1753
+dagster==1.11.2 \
+    --hash=sha256:08ccd053e3dc44743b0b52abf24ace862b0333c6446a0685fccf9578a7d84560 \
+    --hash=sha256:aa23f52ce83abc6fa744bb62adb2f50659a3d3a0a9d7527232be29e477ec92ae
     # via
     #   dagster-celery
     #   dagster-celery-k8s
@@ -248,43 +248,41 @@ dagster==1.11.1 \
     #   dagster-postgres
     #   dagster-webserver
     #   phems-sandbox (setup.py)
-dagster-celery==0.27.1 \
-    --hash=sha256:a503e8aa3479f0f8eb68b5c3ad10b2463752c77b753ced1edf5c4356765e68f7 \
-    --hash=sha256:b8fcb84726f2ac9b856ad6e699f7bd1730fab6480b5a24b4b837132928181d1f
-    # via
-    #   dagster-celery-k8s
-    #   phems-sandbox (setup.py)
-dagster-celery-k8s==0.27.1 \
-    --hash=sha256:8e5c1cdf83a00d052d23b0f897a120bbdeb57d7abc3056242e5f945ec9205578 \
-    --hash=sha256:c17952bf0fff6a3f136b7c6f306d6b433621f0415d98595138669ac393a999e5
-    # via phems-sandbox (setup.py)
-dagster-graphql==1.11.1 \
-    --hash=sha256:001fa9798161a446ed146a0d1b9bebe1a6f4f7bffc14a6fdf2f78a017418c8ea \
-    --hash=sha256:0f499bbd24f710aee1bbbeb28308696adf1d124252f6c725cc9a1debc6e405b1
-    # via dagster-webserver
-dagster-k8s==0.27.1 \
-    --hash=sha256:7262337ef9303c5e4273cb6de5c9db3eb48170c494f5cd4bf7c71317a7d82e32 \
-    --hash=sha256:fe694b0403191ff045fec123c7de6304b2cb27a208542c605788f22a412a271d
+dagster-celery==0.27.2 \
+    --hash=sha256:99e148964b570f8da31ed019fec855fed7149b45e11cc58ff9307437fbc68cd3 \
+    --hash=sha256:d263b1f1280017322b3a1af554ba3e23908c97b6bfecff4fc84ea475b35c7412
     # via dagster-celery-k8s
-dagster-pipes==1.11.1 \
-    --hash=sha256:716ba9bd151c5ee11d7bb2481ef00acdcf722b075719ffb4b18e4488e15c4e4d \
-    --hash=sha256:7d1d88e809ada33b79fd3eb497043bdc3e9adc57a5d5c7c24f16e278a0c9b8c0
-    # via dagster
-dagster-postgres==0.27.1 \
-    --hash=sha256:39f66eca1ecafe7dbfc9cb68368c5aa9dcecb17f42c117b15d0f78bfb7caa727 \
-    --hash=sha256:a00e407ef339776513f6752b25df91a517331a0872ebbfaca4c0797e3bedcd9f
+dagster-celery-k8s==0.27.2 \
+    --hash=sha256:333de2cc62672d86ca970fa168ada80d65dd3edc6162eba2dbb89829472e7c54 \
+    --hash=sha256:962653a5e8f7357c0452f2333221c1ed1167fdc21b2b40599193eadb9a362136
     # via phems-sandbox (setup.py)
-dagster-shared==1.11.1 \
-    --hash=sha256:72397ae50f013b3009d3b6d6756bc6458c902804169ae9ce3403d118d5b3dfa5 \
-    --hash=sha256:99734129c3b79fd9797e6c4b9bef1cfff4694caa9742554560aff96182f03042
+dagster-graphql==1.11.2 \
+    --hash=sha256:97ffa714b543810123f9d034a17fd1b2b6e10b2dabf983a7739b358b0c0d9929 \
+    --hash=sha256:b758bf0c27d253ed9d5a49134ee07e535cddd6c57bf02c0ffbbcaece84e4bea8
+    # via dagster-webserver
+dagster-k8s==0.27.2 \
+    --hash=sha256:4d57220c5b9ca772c7b4605171c98cd925f2a22ed54d6845a94fae5429ac9b79 \
+    --hash=sha256:6e62919f5e656307972cf284ac265540807f6adae2b69298def43c26e9742726
+    # via dagster-celery-k8s
+dagster-pipes==1.11.2 \
+    --hash=sha256:a7705156a85ce596873d4f5af9664675a47bc7554a7a678736fd88903f856410 \
+    --hash=sha256:c2e36f743efd5103373991a5e62aad91754a400d6df1433f6b006032fc7bfc23
     # via dagster
-dagster-webserver==1.11.1 \
-    --hash=sha256:8754ccd4a762cc80f52a32a10358dc10f440c444f6f37276324667b8f6fa7de9 \
-    --hash=sha256:d7b37305341452aee44b21335eedf3d10d4b54f0c85bcab68c8e8edba1bed2fa
+dagster-postgres==0.27.2 \
+    --hash=sha256:0058cfe87bc2b0b57ce8981d52499634a38a2ec03617f10e73aa9650b8629d89 \
+    --hash=sha256:039f46cfd1989086b0deb294268443fc49dd7f80e0768c3323cfd764d70bcca4
     # via phems-sandbox (setup.py)
-docstring-parser==0.16 \
-    --hash=sha256:538beabd0af1e2db0146b6bd3caa526c35a34d61af9fd2887f3a8a27a739aa6e \
-    --hash=sha256:bf0a1387354d3691d102edef7ec124f219ef639982d096e26e3b60aeffa90637
+dagster-shared==1.11.2 \
+    --hash=sha256:5c54a69b35a957ab15b29162a2afa8dedf7ac92cc9d4cddd95c32efc0da6ec55 \
+    --hash=sha256:871013cd3609f986a1b38ac93946bf9020af9e479de8b6b3f1931280ddf5bb95
+    # via dagster
+dagster-webserver==1.11.2 \
+    --hash=sha256:81a1fa43997630fefe7b3bfbf470748d72d77605ec20eada06f751a6a4240187 \
+    --hash=sha256:c96be37a5290444447fd64d8077b80af4a2089c64ff2256636cae47f26801523
+    # via phems-sandbox (setup.py)
+docstring-parser==0.17.0 \
+    --hash=sha256:583de4a309722b3315439bb31d64ba3eebada841f2e2cee23b99df001434c912 \
+    --hash=sha256:cf2569abd23dce8099b300f9b4fa8191e9582dda731fd533daf54c4551658708
     # via dagster
 durationpy==0.10 \
     --hash=sha256:1fa6893409a6e739c9c72334fc65cca1f355dbdd93405d30f726deb5bde42fba \
@@ -298,9 +296,9 @@ flower==2.0.1 \
     --hash=sha256:5ab717b979530770c16afb48b50d2a98d23c3e9fe39851dcf6bc4d01845a02a0 \
     --hash=sha256:9db2c621eeefbc844c8dd88be64aef61e84e2deb29b271e02ab2b5b9f01068e2
     # via phems-sandbox (setup.py)
-fsspec==2025.5.1 \
-    --hash=sha256:24d3a2e663d5fc735ab256263c4075f374a174c3410c0b25e5bd1970bceaa462 \
-    --hash=sha256:2e55e47a540b91843b755e83ded97c6e897fa0942b11490113f09e9c443c2475
+fsspec==2025.7.0 \
+    --hash=sha256:786120687ffa54b8283d942929540d8bc5ccfa820deb555a2b5d0ed2b737bf58 \
+    --hash=sha256:8b012e39f63c7d5f10474de957f3ab793b47b45ae7d39f2fb735f8bbe25c0e21
     # via universal-pathlib
 google-auth==2.40.3 \
     --hash=sha256:1370d4593e86213563547f97a92752fc658456fe4514c809544f330fed45a7ca \
@@ -1329,9 +1327,9 @@ sqlalchemy==2.0.41 \
     # via
     #   alembic
     #   dagster
-starlette==0.47.1 \
-    --hash=sha256:5e11c9f5c7c3f24959edbf2dffdc01bba860228acf657129467d8a7468591527 \
-    --hash=sha256:aef012dd2b6be325ffa16698f9dc533614fb1cebd593a906b90dc1025529a79b
+starlette==0.47.2 \
+    --hash=sha256:6ae9aa5db235e4846decc1e7b79c4f346adf41e9777aebeb49dfd09bbd7023d8 \
+    --hash=sha256:c5847e96134e5c5371ee9fac6fdf1a67336d5815e09eb2a01fdb57a351ef915b
     # via
     #   dagster-graphql
     #   dagster-webserver

@@ -13,7 +13,6 @@ dependencies = [
     "requests",
     "rabbitmq",
     "python-dotenv",
-    "dagster-celery",
     "dagster-postgres",
     "dagster-webserver",
     "dagster-celery-k8s",

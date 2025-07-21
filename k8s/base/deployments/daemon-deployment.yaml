@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daemon
+  namespace: dagster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: daemon
+  template:
+    metadata:
+      labels:
+        app: daemon
+    spec:
+      containers:
+        - name: daemon
+          image: phems-dagster:latest
+          command: ["dagster-daemon", "run"]
+          volumeMounts:
+            - name: dagster-config
+              mountPath: /opt/dagster/home/dagster.yaml
+              subPath: dagster.yaml
+            - name: app-volume
+              mountPath: /opt/dagster/home/app
+      volumes:
+        - name: dagster-config
+          configMap:
+            name: dagster-config
+        - name: app-volume
+          emptyDir: {}

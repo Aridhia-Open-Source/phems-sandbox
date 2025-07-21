@@ -1,0 +1,14 @@
+# filepath: k8s/base/services/codeserver-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: codeserver
+  namespace: dagster
+spec:
+  selector:
+    app: codeserver
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+  type: ClusterIP

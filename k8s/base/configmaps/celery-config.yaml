@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: celery-worker
+  name: celery-config
   namespace: dagster
 data:
   job_spec.yaml: |
@@ -40,4 +40,4 @@ data:
           volumes:
             - name: dagster-config
               configMap:
-                name: dagster-instance
+                name: dagster-config

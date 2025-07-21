@@ -23,4 +23,4 @@ spec:
       volumes:
         - name: dagster-config
           configMap:
-            name: dagster-instance
+            name: dagster-config

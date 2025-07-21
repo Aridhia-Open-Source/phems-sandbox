@@ -1,4 +1,9 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: dagster-config
+  namespace: dagster
 data:
   dagster.yaml: |
     storage:
@@ -14,17 +19,11 @@ data:
       module: dagster_k8s.launcher
       class: CeleryK8sRunLauncher
       config:
-        instance_config_map: dagster-instance
+        instance_config_map: dagster-config
         dagster_home: /opt/dagster/home
-        postgres_password_secret: postgres-secret
         broker: amqp://rabbit:rabbit@rabbitmq:5672/dagster
         backend: db+postgresql://postgres_user:postgres_password@postgres/postgres_db
         job_image: phems-dagster:latest
         job_namespace: dagster
         load_incluster_config: true
-        config_map: celery-worker
-kind: ConfigMap
-metadata:
-  creationTimestamp: null
-  name: dagster-instance
-  namespace: dagster
+        config_map: celery-config

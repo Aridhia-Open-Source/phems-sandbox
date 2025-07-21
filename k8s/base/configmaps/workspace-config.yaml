@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workspace-config
+  namespace: dagster
+data:
+  workspace.yaml: |
+    load_from:
+      - python_file:
+          relative_path: app/definitions.py
+          working_directory: /opt/dagster/

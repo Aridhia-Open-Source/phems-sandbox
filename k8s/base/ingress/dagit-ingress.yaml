@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dagit-ingress
+  namespace: dagster
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /dagit
+            pathType: Prefix
+            backend:
+              service:
+                name: dagit
+                port:
+                  number: 3000
