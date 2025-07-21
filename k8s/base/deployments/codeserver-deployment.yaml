@@ -36,4 +36,3 @@ spec:
             name: dagster-config
         - name: app-volume
           emptyDir: {}
-
