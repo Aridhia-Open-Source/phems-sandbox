@@ -11,9 +11,9 @@ echo "----------------------------------"
 
 # build and import docker image
 echo "Building and importing Docker image..."
-docker build -t phems-dagster:latest .
-docker save phems-dagster:latest > phems-dagster.tar
-microk8s ctr image import phems-dagster.tar
+docker build -t phems-dagster .
+# docker save phems-dagster > phems-dagster.tar
+# microk8s ctr image import phems-dagster.tar
 echo "----------------------------------"
 
 
@@ -38,7 +38,7 @@ kubectl apply -f k8s/base/deployments/flower-deployment.yaml
 ## apply services
 kubectl apply -f k8s/base/services/
 ## apply ingresses
-kubectl apply -f k8s/base/ingress/
+# kubectl apply -f k8s/base/ingress/
 echo "----------------------------------"
 
 # # verify kubernetes deployment

@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: codeserver
-          image: phems-dagster:latest
+          image: phems-dagster
+          imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",
             "-f", "app/definitions.py",

@@ -23,7 +23,7 @@ data:
         dagster_home: /opt/dagster/home
         broker: amqp://rabbit:rabbit@rabbitmq:5672/dagster
         backend: db+postgresql://postgres_user:postgres_password@postgres/postgres_db
-        job_image: phems-dagster:latest
+        job_image: phems-dagster
         job_namespace: dagster
         load_incluster_config: true
         config_map: celery-config

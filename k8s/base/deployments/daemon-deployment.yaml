@@ -15,17 +15,24 @@ spec:
     spec:
       containers:
         - name: daemon
-          image: phems-dagster:latest
+          image: phems-dagster
           command: ["dagster-daemon", "run"]
+          imagePullPolicy: Never
           volumeMounts:
             - name: dagster-config
               mountPath: /opt/dagster/home/dagster.yaml
               subPath: dagster.yaml
+            - name: workspace-config
+              mountPath: /opt/dagster/home/workspace.yaml
+              subPath: workspace.yaml
             - name: app-volume
               mountPath: /opt/dagster/home/app
       volumes:
         - name: dagster-config
           configMap:
             name: dagster-config
+        - name: workspace-config
+          configMap:
+            name: workspace-config
         - name: app-volume
           emptyDir: {}

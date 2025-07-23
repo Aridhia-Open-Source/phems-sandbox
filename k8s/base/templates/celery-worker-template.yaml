@@ -11,7 +11,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: dagster-worker
-          image: phems-dagster:latest
+          image: phems-dagster
           command: ["dagster-celery", "worker", "--app", "app.worker", "--loglevel", "INFO", "--concurrency", "1", "--queues", "dagster"]
           env:
             - name: DAGSTER_HOME
