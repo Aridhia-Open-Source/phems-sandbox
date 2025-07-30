@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flower
+  name: flowermon
   namespace: dagster
 spec:
   replicas: 1
@@ -14,12 +14,13 @@ spec:
         app: flower
     spec:
       containers:
-        - name: flower
+        - name: flowermon
           image: mher/flower
           ports:
             - containerPort: 5555
+          envFrom:
+            - secretRef:
+                name: flower-secret
           env:
-            - name: CELERY_BROKER_URL
-              value: "amqp://rabbit:rabbit@rabbitmq:5672/dagster"
-            - name: CELERY_RESULT_BACKEND
-              value: "db+postgresql://postgres_user:postgres_password@postgres/postgres_db"
+            - name: FLOWER_PORT
+              value: "5555"

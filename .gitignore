@@ -198,3 +198,4 @@ cython_debug/
 
 # Kubernetes
 *.tar
+helm/values.yaml
