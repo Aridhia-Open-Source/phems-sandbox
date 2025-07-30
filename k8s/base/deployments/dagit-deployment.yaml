@@ -17,7 +17,11 @@ spec:
         - name: dagit
           image: "phems-dagster"
           imagePullPolicy: Never
-          command: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "-w", "workspace.yaml"]
+          command: ["dagster-webserver",
+            "-h", "0.0.0.0",
+            "-p", "3000",
+            "-w", "workspace.yaml"
+          ]
           ports:
             - containerPort: 3000
           volumeMounts:

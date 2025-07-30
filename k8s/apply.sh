@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 
 set -e
-alias kubectl='microk8s kubectl'
+alias kubectl='microk8s kubectl -n sandbox'
 
+mode=${1:-apply}
 # apply namespace
-kubectl apply -f k8s/base/namespace.yaml
+kubectl $mode -f k8s/base/namespace.yaml
 # apply configmaps
-kubectl apply -f k8s/base/configmaps
+kubectl $mode -f k8s/base/configmaps
 # apply secrets
-kubectl apply -f k8s/base/secrets
+kubectl $mode -f k8s/base/secrets
 # apply persistent volumes
-kubectl apply -f k8s/base/volumes
+kubectl $mode -f k8s/base/volumes
 # apply deployment deployments
-kubectl apply -f k8s/base/deployments
+kubectl $mode -f k8s/base/deployments
 # apply deployment services
-kubectl apply -f k8s/base/services
+kubectl $mode -f k8s/base/services
 # apply ingresses
-kubectl apply -f k8s/base/ingress
+kubectl $mode -f k8s/base/ingress
 

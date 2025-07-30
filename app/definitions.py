@@ -8,7 +8,7 @@ class Executor:
     celery_k8s = celery_k8s_job_executor.configured({
         "broker": "pyamqp://rabbit:rabbit@rabbitmq:5672/dagster",
         "backend": "db+postgresql://postgres_user:postgres_password@postgres/postgres_db",
-        "include": ["app.definitions"]
+        # "include": ["app.definitions"]
     })
 
 

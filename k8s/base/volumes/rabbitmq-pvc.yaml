@@ -5,8 +5,9 @@ metadata:
   namespace: dagster
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
+      storage: 100Mi
   storageClassName: microk8s-hostpath
+  volumeName: sandbox-pv2

@@ -19,8 +19,9 @@ spec:
           imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",
-            "-f", "app/definitions.py",
             "-h", "0.0.0.0",
+            "--working-directory", "/opt/dagster/home/",
+            "--python-file", "app/definitions.py",
             "-p", "4000",
           ]
           ports:
@@ -29,11 +30,17 @@ spec:
             - name: dagster-config
               mountPath: /opt/dagster/home/dagster.yaml
               subPath: dagster.yaml
+            - name: workspace-config
+              mountPath: /opt/dagster/home/workspace.yaml
+              subPath: workspace.yaml
             - name: app-volume
               mountPath: /opt/dagster/home/app
       volumes:
         - name: dagster-config
           configMap:
             name: dagster-config
+        - name: workspace-config
+          configMap:
+            name: workspace-config
         - name: app-volume
           emptyDir: {}
