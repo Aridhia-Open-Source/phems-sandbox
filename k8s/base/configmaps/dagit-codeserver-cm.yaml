@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: dagster
+  name: environment-code
+data:
+  DAGSTER_CELERY_BROKER_URL: amqp://rabbit:rabbit@rabbitmq:5672/dagster
+  DAGSTER_CELERY_BACKEND_URL: db+postgresql://postgres_user:postgres_password@postgres/postgres_db

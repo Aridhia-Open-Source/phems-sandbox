@@ -10,4 +10,4 @@ spec:
     requests:
       storage: 100Mi
   storageClassName: microk8s-hostpath
-  volumeName: sandbox-pv
+  volumeName: minio-pv

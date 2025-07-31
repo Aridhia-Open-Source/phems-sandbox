@@ -31,6 +31,9 @@ spec:
             - name: workspace-config
               mountPath: /opt/dagster/home/workspace.yaml
               subPath: workspace.yaml
+          envFrom:
+            - configMapRef:
+                name: environment-code
       volumes:
         - name: dagster-config
           configMap:

@@ -9,7 +9,7 @@ provisioner: kubernetes.io/no-provisioner
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: sandbox-pv
+  name: minio-pv
 spec:
   storageClassName: microk8s-hostpath
   accessModes:
@@ -31,7 +31,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: sandbox-pv1
+  name: postgres-pv
 spec:
   storageClassName: microk8s-hostpath
   accessModes:
@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: sandbox-pv2
+  name: rabbit-pv
 spec:
   storageClassName: microk8s-hostpath
   accessModes:
