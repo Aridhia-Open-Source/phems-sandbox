@@ -10,4 +10,4 @@ spec:
     requests:
       storage: 100Mi
   storageClassName: microk8s-hostpath
-  volumeName: sandbox-pv2
+  volumeName: rabbit-pv

@@ -21,6 +21,9 @@ spec:
             "--working-directory", "/opt/dagster/home/",
             "--python-file", "app/definitions.py"
           ]
+          envFrom:
+            - configMapRef:
+                name: environment-code
           imagePullPolicy: Never
           volumeMounts:
             - name: dagster-config

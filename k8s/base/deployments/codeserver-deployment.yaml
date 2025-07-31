@@ -26,6 +26,9 @@ spec:
           ]
           ports:
             - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: environment-code
           volumeMounts:
             - name: dagster-config
               mountPath: /opt/dagster/home/dagster.yaml

@@ -18,11 +18,19 @@ data:
       module: dagster_celery_k8s.launcher
       class: CeleryK8sRunLauncher
       config:
-        instance_config_map: dagster-config
         dagster_home: /opt/dagster/home
-        broker: amqp://rabbit:rabbit@rabbitmq:5672/dagster
-        backend: db+postgresql://postgres_user:postgres_password@postgres/postgres_db
-        job_image: phems-dagster
+        broker:
+          env: DAGSTER_CELERY_BROKER_URL
+        volumes:
+          - name: job
+            configMap: celery-config
+        volume_mounts:
+          - name: job
+            mountPath: /opt/dagster/home
+            subPath: job_spec.yaml
+        instance_config_map: dagster-config
+        backend:
+          env: DAGSTER_CELERY_BACKEND_URL
         job_namespace: dagster
         load_incluster_config: true
-        config_map: celery-config
+        postgres_password_secret: postgres-secret
