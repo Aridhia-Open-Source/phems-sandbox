@@ -19,4 +19,3 @@ kubectl $MODE -f k8s/base/deployments
 kubectl $MODE -f k8s/base/services
 # apply ingresses
 kubectl $MODE -f k8s/base/ingress
-
