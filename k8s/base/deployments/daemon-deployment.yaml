@@ -23,7 +23,7 @@ spec:
           ]
           envFrom:
             - configMapRef:
-                name: environment-code
+                name: dagster-environment-config
           imagePullPolicy: Never
           volumeMounts:
             - name: dagster-config

@@ -33,7 +33,7 @@ spec:
               subPath: workspace.yaml
           envFrom:
             - configMapRef:
-                name: environment-code
+                name: dagster-environment-config
       volumes:
         - name: dagster-config
           configMap:
