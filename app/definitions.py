@@ -27,4 +27,13 @@ def processed_data_job():
 defs = dg.Definitions(
     assets=all_assets,
     jobs=[processed_data_job],
+    resources={
+        "io_manager": dg.s3_io_manager.configured({
+            "s3_bucket": "phems-sandbox",
+            "s3_prefix": "processed_data",
+            "s3_endpoint_url": "http://minio:9000",
+            "s3_access_key": "minioadmin",
+            "s3_region": "us-east-1",
+        }),
+    }
 )
