@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 
 set -e
-MODE=${1:-apply}
+export K8MODE=${1:-apply}
+export BASEPATH='k8s/base'
 export NAMESPACE='dagster'
 alias kubectl="microk8s kubectl -n ${NAMESPACE}"
 
 # apply namespace
-kubectl $MODE -f k8s/base/namespace.yaml
+kubectl $K8MODE -f $BASEPATH/namespace.yaml
 # apply configmaps
-kubectl $MODE -f k8s/base/configmaps
+kubectl $K8MODE -f $BASEPATH/configmaps
 # apply secrets
-kubectl $MODE -f k8s/base/secrets
+kubectl $K8MODE -f $BASEPATH/secrets
 # apply persistent volumes
-kubectl $MODE -f k8s/base/volumes
+kubectl $K8MODE -f $BASEPATH/volumes
 # apply deployment deployments
-kubectl $MODE -f k8s/base/deployments
+kubectl $K8MODE -f $BASEPATH/deployments
 # apply deployment services
-kubectl $MODE -f k8s/base/services
+kubectl $K8MODE -f $BASEPATH/services
 # apply ingresses
-kubectl $MODE -f k8s/base/ingress
+kubectl $K8MODE -f $BASEPATH/ingress

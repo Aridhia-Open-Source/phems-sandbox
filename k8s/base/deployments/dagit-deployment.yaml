@@ -28,9 +28,6 @@ spec:
             - name: dagster-config
               mountPath: /opt/dagster/home/dagster.yaml
               subPath: dagster.yaml
-            - name: workspace-config
-              mountPath: /opt/dagster/home/workspace.yaml
-              subPath: workspace.yaml
           envFrom:
             - configMapRef:
                 name: dagster-environment-config
@@ -38,6 +35,3 @@ spec:
         - name: dagster-config
           configMap:
             name: dagster-config
-        - name: workspace-config
-          configMap:
-            name: workspace-config
