@@ -12,6 +12,7 @@ dependencies = [
     "pandas",
     "requests",
     "rabbitmq",
+    "dagster-aws",
     "python-dotenv",
     "dagster-postgres",
     "dagster-webserver",
