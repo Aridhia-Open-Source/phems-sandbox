@@ -12,10 +12,11 @@ dependencies = [
     "pandas",
     "requests",
     "rabbitmq",
+    "dagster-aws",
     "python-dotenv",
-    "dagster-celery",
     "dagster-postgres",
     "dagster-webserver",
+    "dagster-celery-k8s",
 ]
 
 [project.optional-dependencies]

@@ -195,3 +195,7 @@ cython_debug/
 
 # Dagster
 *.tmp_*/
+
+# Kubernetes
+*.tar
+helm/values.yaml

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daemon
+  namespace: dagster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: daemon
+  template:
+    metadata:
+      labels:
+        app: daemon
+    spec:
+      containers:
+        - name: daemon
+          image: phems-dagster:v34
+          command: [
+            "dagster-daemon", "run",
+            "--working-directory", "/opt/dagster/home/",
+            "--python-file", "app/definitions.py"
+          ]
+
+          envFrom:
+            - configMapRef:
+                name: dagster-environment-config
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: dagster-config
+              mountPath: /opt/dagster/home/dagster.yaml
+              subPath: dagster.yaml
+      volumes:
+        - name: dagster-config
+          configMap:
+            name: dagster-config

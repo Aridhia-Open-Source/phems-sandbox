@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dagster-step-worker
+  namespace: dagster
+spec:
+  selector:
+    matchLabels:
+      app: dagster-step-worker
+  template:
+    metadata:
+      labels:
+        app: dagster-step-worker
+    spec:
+      containers:
+        - name: dagster-step-worker
+          image: phems-dagster:v34
+          command: [
+            "dagster-celery", "worker", "start",
+            "--app", "app.worker",
+            "--loglevel", "INFO",
+            "--queue", "dagster"
+          ]
+          envFrom:
+            - configMapRef:
+                name: dagster-environment-config
+          volumeMounts:
+            - name: dagster-config
+              mountPath: /opt/dagster/home/dagster.yaml
+              subPath: dagster.yaml
+      volumes:
+        - name: dagster-config
+          configMap:
+            name: dagster-config

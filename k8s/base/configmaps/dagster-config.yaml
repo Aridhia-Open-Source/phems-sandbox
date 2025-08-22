@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dagster-config
+  namespace: dagster
+data:
+  dagster.yaml: |
+    storage:
+      postgres:
+        postgres_db:
+          db_name: postgres_db
+          username: postgres_user
+          password: postgres_password
+          hostname: postgres
+          port: 5432
+
+    run_launcher:
+      module: dagster_celery_k8s.launcher
+      class: CeleryK8sRunLauncher
+      config:
+        instance_config_map: celery-config
+        dagster_home: /opt/dagster/home
+        job_namespace: dagster
+        load_incluster_config: true
+        postgres_password_secret: dagster-postgres-password-secret
+        broker:
+          env: DAGSTER_CELERY_BROKER_URL
+        backend:
+          env: DAGSTER_CELERY_BACKEND_URL
+        env_config_maps:
+          - dagster-environment-config
+        volumes:
+          - name: job
+            configMap:
+              name: celery-config
+        volume_mounts:
+          - name: job
+            mountPath: /opt/dagster/home/job_spec.yaml
+            subPath: job_spec.yaml
