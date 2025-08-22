@@ -15,12 +15,13 @@ spec:
     spec:
       containers:
         - name: daemon
-          image: phems-dagster
+          image: phems-dagster:v25
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",
             "--python-file", "app/definitions.py"
           ]
+
           envFrom:
             - configMapRef:
                 name: dagster-environment-config
