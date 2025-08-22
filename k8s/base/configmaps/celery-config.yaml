@@ -8,7 +8,7 @@ data:
     apiVersion: batch/v1
     kind: Job
     metadata:
-      name: dagster-worker-template
+      name: dagster-run-worker-template
     spec:
       template:
         metadata:
@@ -17,22 +17,18 @@ data:
         spec:
           restartPolicy: Never
           containers:
-            - name: dagster-worker
-              image: phems-dagster:v25
-              command:
-                - dagster-celery
-                - worker
-                - --app
-                - app.worker
-                - --loglevel
-                - INFO
-                - --concurrency
-                - "1"
-                - --queues
-                - dagster
-              env:
-                - name: DAGSTER_HOME
-                  value: /opt/dagster/home
+            - name: dagster-run-worker
+              image: phems-dagster:v34
+              command: [
+                "dagster-celery", "worker",
+                "--app", "app.worker",
+                "--loglevel", "INFO",
+                "--concurrency", "1",
+                "--queues", "dagster"
+              ]
+              envFrom:
+                - configMapRef:
+                    name: dagster-environment-config
               volumeMounts:
                 - name: dagster-config
                   mountPath: /opt/dagster/home/dagster.yaml

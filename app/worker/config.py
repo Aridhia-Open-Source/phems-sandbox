@@ -14,3 +14,6 @@ task_queues = [
 ]
 
 task_create_missing_queues = False
+# task_default_queue = 'dagster'
+# task_default_exchange = 'dagster'
+# task_default_routing_key = 'dagster'

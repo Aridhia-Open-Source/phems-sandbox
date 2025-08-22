@@ -32,5 +32,4 @@
 The run worker is still responsible for traversing the execution plan ()
 
 #### Step Worker
-The step worker is responsible for executing a single step, writing the structured events to the database. 
-The Celery worker polls for the step worker completion.
+The step worker is responsible for executing a single step, writing the structured events to the database.  The Celery worker polls for the step worker completion.

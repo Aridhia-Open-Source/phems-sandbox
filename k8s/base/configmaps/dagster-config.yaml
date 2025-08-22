@@ -18,7 +18,7 @@ data:
       module: dagster_celery_k8s.launcher
       class: CeleryK8sRunLauncher
       config:
-        instance_config_map: dagster-config
+        instance_config_map: celery-config
         dagster_home: /opt/dagster/home
         job_namespace: dagster
         load_incluster_config: true
@@ -27,11 +27,13 @@ data:
           env: DAGSTER_CELERY_BROKER_URL
         backend:
           env: DAGSTER_CELERY_BACKEND_URL
+        env_config_maps:
+          - dagster-environment-config
         volumes:
           - name: job
             configMap:
               name: celery-config
         volume_mounts:
           - name: job
-            mountPath: /opt/dagster/home
+            mountPath: /opt/dagster/home/job_spec.yaml
             subPath: job_spec.yaml
