@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: daemon
-          image: phems-dagster:v37
+          image: phems-dagster:v50
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",
@@ -24,7 +24,7 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: dagster-environment-config
+                name: dagster-env-config
           imagePullPolicy: Never
           volumeMounts:
             - name: dagster-config

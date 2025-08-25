@@ -3,7 +3,7 @@ import os
 import dagster as dg
 from dagster_celery_k8s import celery_k8s_job_executor
 from dagster_aws.s3 import S3PickleIOManager, S3Resource
-from app import assets
+from app.assets import examples
 
 
 minio_manager = S3PickleIOManager(
@@ -19,18 +19,17 @@ minio_manager = S3PickleIOManager(
 )
 
 
-# Pull the asset into a job manually
 @dg.job
-def processed_data_job():
-    assets.processed_data_1()
-    assets.processed_data_2()
-    assets.processed_data_3()
+def example_job():
+    examples.example_1()
+    examples.example_2()
+    examples.example_3()
 
 
 defs = dg.Definitions(
-    assets=dg.load_assets_from_modules([assets]),
+    assets=dg.load_assets_from_modules([examples]),
     executor=celery_k8s_job_executor,
     resources={"s3": minio_manager},
-    jobs=[processed_data_job],
+    jobs=[example_job],
 
 )

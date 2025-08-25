@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dagster-step-worker
+  name: worker
   namespace: dagster
 spec:
   selector:
     matchLabels:
-      app: dagster-step-worker
+      app: worker
   template:
     metadata:
       labels:
-        app: dagster-step-worker
+        app: worker
     spec:
       containers:
-        - name: dagster-step-worker
-          image: phems-dagster:v37
+        - name: worker
+          image: phems-dagster:v50
           command: [
             "dagster-celery", "worker", "start",
             "--app", "app.worker",
@@ -23,7 +23,7 @@ spec:
           ]
           envFrom:
             - configMapRef:
-                name: dagster-environment-config
+                name: dagster-env-config
           volumeMounts:
             - name: dagster-config
               mountPath: /opt/dagster/home/dagster.yaml

@@ -15,7 +15,7 @@
       spec:
         containers:
           - name: dagit
-            image: phems-dagster:v37
+            image: phems-dagster:v50
             imagePullPolicy: Never
             command: ["dagster-webserver",
               "-h", "0.0.0.0",
@@ -30,7 +30,7 @@
                 subPath: dagster.yaml
             envFrom:
               - configMapRef:
-                  name: dagster-environment-config
+                  name: dagster-env-config
         volumes:
           - name: dagster-config
             configMap:

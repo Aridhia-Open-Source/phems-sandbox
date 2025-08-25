@@ -28,11 +28,11 @@ data:
         backend:
           env: DAGSTER_CELERY_BACKEND_URL
         env_config_maps:
-          - dagster-environment-config
+          - dagster-env-config
         volumes:
           - name: job
             configMap:
-              name: celery-config
+              name: dagster-job-config
         volume_mounts:
           - name: job
             mountPath: /opt/dagster/home/job_spec.yaml
