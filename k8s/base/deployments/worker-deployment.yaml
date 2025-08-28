@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: phems-dagster:v50
+          image: phems-dagster:v53
           command: [
             "dagster-celery", "worker", "start",
             "--app", "app.worker",

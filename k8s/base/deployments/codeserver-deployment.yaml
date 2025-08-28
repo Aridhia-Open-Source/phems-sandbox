@@ -15,13 +15,13 @@ spec:
     spec:
       containers:
         - name: codeserver
-          image: phems-dagster:v50
+          image: phems-dagster:v53
           imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",
             "-h", "0.0.0.0",
             "--working-directory", "/opt/dagster/home/",
-            "--python-file", "app/definitions.py",
+            "--python-file", "app/definitions",
             "-p", "4000",
           ]
           ports:
