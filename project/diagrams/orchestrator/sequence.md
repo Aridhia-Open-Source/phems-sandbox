@@ -1,6 +1,3 @@
-# Architecture Diagram
-
-```mermaid
 ---
 config:
   layout: elk
@@ -11,9 +8,10 @@ flowchart TD
   subgraph GitRepos["Git Repos"]
     NodeRepo("Node Repo")
     CodeRepo("Code Repo")
+    AggRepo("Aggregator Repo")
   end
 
-  subgraph FederatedNode["Federated Node"]
+  subgraph FederatedNode["Federated Node (Hospital)"]
     subgraph ArgoPipelines["ArgoCD Pipelines"]
       NodePipeline("Node Pipeline")
       CodePipeline("Code Pipeline")
@@ -23,7 +21,6 @@ flowchart TD
       subgraph DagsterWorkers["Workers"]
         K8sPod1("Pod")
         K8sPod2("Pod")
-        K8sPod3("Pod")
       end
 
       subgraph DagsterServices["Services"]
@@ -36,9 +33,24 @@ flowchart TD
     CodeMount("Code Mount")
 
     subgraph DagsterResources["Resources"]
-      ArtifactStorage("Minio Artifact Storage")
-      ResultsBackend("Postgres Results Backend")
-      CeleryBroker("RabbitMQ Message Broker")
+      ArtifactStorage("Hospital Minio Storage")
+      ResultsBackend("Hospital Postgres")
+      CeleryBroker("Hospital RabbitMQ")
+    end
+  end
+
+  subgraph FederatedAggregator["Federated Aggregator"]
+    subgraph AggDagster["Dagster K8s"]
+      AggWorkers("Workers (Pods)")
+      AggDaemon("Daemon")
+      AggCodeServer("CodeServer")
+      AggWebServer("WebServer")
+    end
+
+    subgraph AggResources["Resources"]
+      GlobalArtifactStorage("Global Minio Storage")
+      GlobalResultsBackend("Global Postgres")
+      GlobalBroker("Global RabbitMQ")
     end
   end
 
@@ -46,9 +58,16 @@ flowchart TD
 
   CodeRepo --> CodePipeline
   NodeRepo --> NodePipeline
+  AggRepo --> AggDagster
+
   NodePipeline --> DagsterK8s
   CodePipeline --> CodeMount
   CodeMount --- CodeServer
   DagsterK8s --- DagsterResources
   ArtifactStorage --> ResultsStorage
-```
+
+  AggDagster --- AggResources
+  GlobalArtifactStorage --> ResultsStorage
+
+  DagsterResources --> GlobalArtifactStorage
+  GlobalArtifactStorage --> DagsterResources
