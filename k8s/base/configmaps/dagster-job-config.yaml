@@ -18,7 +18,7 @@ data:
           restartPolicy: Never
           containers:
             - name: worker
-              image: phems-dagster:v53
+              image: phems-dagster:v82
               command: [
                 "dagster-celery", "worker",
                 "--app", "app.worker",

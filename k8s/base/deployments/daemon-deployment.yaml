@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: daemon
-          image: phems-dagster:v53
+          image: phems-dagster:v82
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",
