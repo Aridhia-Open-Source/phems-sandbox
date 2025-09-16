@@ -9,9 +9,11 @@ dependencies = [
     "dagster",
     "dagster-aws",
     "dagster-celery-k8s",
+    "dagster-mlflow",
     "dagster-postgres",
     "dagster-webserver",
     "flower",
+    "mlflow",
     "pandas",
     "python-dotenv",
     "pytest",
@@ -44,4 +46,3 @@ code_location_name = "app"
 [tool.pytest.ini_options]
 pythonpath = ["app"]
 addopts = "-p no:cacheprovider"
-

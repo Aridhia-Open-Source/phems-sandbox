@@ -1,6 +1,9 @@
 import os
 
+import botocore
+import botocore.exceptions
 from dagster_aws.s3 import S3PickleIOManager, S3Resource
+import botocore
 
 
 class MinioManager:
@@ -27,7 +30,7 @@ class MinioManager:
         )
 
     def setup(self):
-        # hacky but it works for PoC
+        # TODO: Move to initContainers
         self._create_bucket_if_not_exists(self.bucket_name)
         self._create_bucket_if_not_exists(os.environ['DAGSTER_MLFLOW_ARTIFACT_BUCKET'])
         return self
@@ -47,5 +50,5 @@ class MinioManager:
         try:
             client.head_bucket(Bucket=name)
             return True
-        except client.exceptions.BotocoreError:
+        except botocore.exceptions.ClientError:
             return False
