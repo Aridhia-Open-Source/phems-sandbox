@@ -27,7 +27,9 @@ class MinioManager:
         )
 
     def setup(self):
+        # hacky but it works for PoC
         self._create_bucket_if_not_exists(self.bucket_name)
+        self._create_bucket_if_not_exists(os.environ['DAGSTER_MLFLOW_ARTIFACT_BUCKET'])
         return self
 
     def _create_bucket_if_not_exists(self, name: str) -> bool:

@@ -5,18 +5,20 @@ authors = [{ name = "George Eddie", email = "george.eddie@aridhia.com" }]
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
-    "dagster",
     "celery",
-    "flower",
-    "pytest",
-    "pandas",
-    "requests",
-    "rabbitmq",
+    "dagster",
     "dagster-aws",
-    "python-dotenv",
+    "dagster-celery-k8s",
     "dagster-postgres",
     "dagster-webserver",
-    "dagster-celery-k8s",
+    "flower",
+    "pandas",
+    "python-dotenv",
+    "pytest",
+    "rabbitmq",
+    "requests",
+    "scikit-learn",
+    "xgboost",
 ]
 
 [project.optional-dependencies]
