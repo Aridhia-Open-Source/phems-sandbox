@@ -16,11 +16,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import ElasticNet
 
-from app.definitions import typedefs
+from app.definitions import typedefs as td
 
-ALPHA = 0.9
-L1_RATIO = 1.0
-MODEL_NAME = "ElasticnetWineModel"
 DATASETS_BASE_URI = "http://archive.ics.uci.edu/ml/machine-learning-databases"
 
 logging.basicConfig(level=logging.DEBUG)
@@ -28,53 +25,51 @@ logger = logging.getLogger(__name__)
 
 
 @dg.asset
-def wine_quality():
+def wine_quality(wine_dataset):
     np.random.seed(40)
-    params = {'alpha': ALPHA, 'l1_ratio': L1_RATIO}
-    data = load_wine_dataset(filepath="wine-quality/winequality-red.csv")
-    train_x, test_x, train_y, test_y = _load_train_test_data(data, column='quality')
+    model_name = "ElasticnetWineModel"
+    params = {'alpha': 0.9, 'l1_ratio': 1.0, 'random_state': 42}
+    train_x, test_x, train_y, test_y = _load_train_test_data(wine_dataset, col='quality')
 
     with mlflow.start_run():
-        lr = ElasticNet(alpha=ALPHA, l1_ratio=L1_RATIO, random_state=42)
-        lr.fit(train_x, train_y)
-        predicted_qualities = lr.predict(test_x)
-
-        rmse, mae, r2 = eval_wine_metrics(test_y, predicted_qualities)
-        metrics = {'RMSE': rmse, 'MAE': mae, 'R2': r2}
-        logger.info(f"{MODEL_NAME} - params: {params}, metrics: {metrics}")
+        lr_model = ElasticNet(**params).fit(train_x, train_y)
+        predictions = lr_model.predict(test_x)
+        metrics = _eval_wine_metrics(actual=test_y, pred=predictions)
+        logger.info(f"{model_name} - params: {params}, metrics: {metrics}")
 
         mlflow.log_params(params)
         mlflow.log_metrics(metrics)
 
         mlflow.sklearn.log_model(  # type: ignore
-            sk_model=lr,
+            sk_model=lr_model,
             artifact_path="sk_models",
-            registered_model_name=MODEL_NAME
+            registered_model_name=model_name
         )
 
-    logger.info("{MODEL_NAME} - training complete")
+    logger.info(f"{model_name} - training complete")
 
 
-@dg.op
-def load_wine_dataset(filepath: str) -> pd.DataFrame:
-    return pd.read_csv(f"{DATASETS_BASE_URI}/{filepath}", sep=';')
+@dg.asset
+def wine_dataset() -> pd.DataFrame:
+    """Dagster asset with fixed dataset path."""
+    return _load_wine_dataset("wine-quality/winequality-red.csv")
 
 
-@dg.op
-def eval_wine_metrics(
-    actual: pd.DataFrame,
-    pred: np.ndarray
-) -> tuple[float, float, float]:
+def _load_wine_dataset(filepath: str) -> pd.DataFrame:
+    return pd.read_csv(f"{DATASETS_BASE_URI}/{filepath}", sep=";")
+
+
+def _load_train_test_data(data: pd.DataFrame, col: str) -> td.TrainTestTuple:
+    train, test = train_test_split(data)
+    train_x = train.drop([col], axis=1)
+    test_x = test.drop([col], axis=1)
+    train_y = train[[col]]
+    test_y = test[[col]]
+    return train_x, test_x, train_y, test_y
+
+
+def _eval_wine_metrics(actual: pd.DataFrame, pred: np.ndarray) -> dict[str, float]:
     rmse = np.sqrt(mean_squared_error(actual, pred))
     mae = mean_absolute_error(actual, pred)
     r2 = r2_score(actual, pred)
-    return rmse, mae, r2
-
-
-def _load_train_test_data(data: pd.DataFrame, column: str) -> typedefs.TrainTestTuple:
-    train, test = train_test_split(data)
-    train_x = train.drop([column], axis=1)
-    test_x = test.drop([column], axis=1)
-    train_y = train[[column]]
-    test_y = test[[column]]
-    return train_x, test_x, train_y, test_y
+    return {'RMSE': rmse, 'MAE': mae, 'R2': r2}
