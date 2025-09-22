@@ -15,9 +15,10 @@
       spec:
         containers:
           - name: dagit
-            image: phems-dagster:v82
+            image: phems-dagster:v106
             imagePullPolicy: Never
-            command: ["dagster-webserver",
+            command: [
+              "dagster-webserver",
               "-h", "0.0.0.0",
               "-p", "3000",
               "-w", "workspace.yaml"

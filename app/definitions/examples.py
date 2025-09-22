@@ -48,7 +48,7 @@ def example_complex_asset(example_asset_a: int, example_asset_b: int) -> int:
 
 
 @dg.job
-def example_job():
+def example_op_job():
     print("Example Job")
     num = random_int()
     result = example_op(num)

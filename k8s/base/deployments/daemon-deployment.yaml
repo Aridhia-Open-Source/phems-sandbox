@@ -13,15 +13,34 @@ spec:
       labels:
         app: daemon
     spec:
+      initContainers:
+      - name: create-mlflow-db
+        image: postgres:15
+        command: ["sh", "-c"]
+        args:
+          - |
+            echo "Ensuring database $POSTGRES_DB exists..."
+            psql -h postgres -U "$POSTGRES_USER" -d postgres -tc \
+              "SELECT 1 FROM pg_database WHERE datname = '$POSTGRES_DB'" \
+              | grep -q 1 || \
+              psql -h postgres -U "$POSTGRES_USER" -d postgres -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;"
+        envFrom:
+          - secretRef:
+              name: mlflow-secret
+        env:
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mlflow-secret
+                key: POSTGRES_PASSWORD
       containers:
         - name: daemon
-          image: phems-dagster:v82
+          image: phems-dagster:v106
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",
             "--python-file", "app/definitions"
           ]
-
           envFrom:
             - configMapRef:
                 name: dagster-env-config
