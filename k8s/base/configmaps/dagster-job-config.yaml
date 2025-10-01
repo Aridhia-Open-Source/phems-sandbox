@@ -18,7 +18,7 @@ data:
           restartPolicy: Never
           containers:
             - name: worker
-              image: phems-dagster:v106
+              image: phems-dagster:v118
               command: [
                 "dagster-celery", "worker",
                 "--app", "app.worker",
@@ -33,7 +33,12 @@ data:
                 - name: dagster-config
                   mountPath: /opt/dagster/home/dagster.yaml
                   subPath: dagster.yaml
+                - name: artifacts-pvc
+                  mountPath: /mnt/dagster/artifacts
           volumes:
             - name: dagster-config
               configMap:
                 name: dagster-config
+            - name: artifacts-pvc
+              persistentVolumeClaim:
+                claimName: artifacts-pvc

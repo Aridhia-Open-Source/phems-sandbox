@@ -1,7 +1,8 @@
 import dagster as dg
+from dagster_k8s import PipesK8sClient
 from dagster_celery_k8s import celery_k8s_job_executor
 
-from app.definitions import jobs, schedules, examples, hackernews, wine_quality
+from app.definitions import jobs, pipes, schedules, examples, hackernews, wine_quality
 from app.resources.minio import MinioManager
 
 minio = MinioManager().setup()
@@ -9,7 +10,10 @@ minio = MinioManager().setup()
 defs = dg.Definitions(
     jobs=jobs.asset_jobs,
     schedules=schedules.asset_schedules,
-    assets=dg.load_assets_from_modules([examples, hackernews, wine_quality]),
+    assets=dg.load_assets_from_modules([pipes, examples, hackernews, wine_quality]),
     executor=celery_k8s_job_executor,
-    resources={"io_manager": minio.io_manager},
+    resources={
+        "io_manager": minio.io_manager,
+        "k8s_pipes_client": PipesK8sClient(),
+    },
 )

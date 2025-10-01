@@ -5,6 +5,7 @@ metadata:
   namespace: dagster
 data:
   DAGSTER_HOME: /opt/dagster/home
+  DAGSTER_ARTIFACT_MOUNT_PATH: /mnt/dagster/artifacts
   DAGSTER_CELERY_BROKER_URL: amqp://rabbit:rabbit@rabbitmq:5672/dagster
   DAGSTER_CELERY_BACKEND_URL: db+postgresql://postgres_user:postgres_password@postgres/postgres_db
   DAGSTER_MINIO_ENDPOINT: http://minio:9000
@@ -12,7 +13,7 @@ data:
   DAGSTER_MINIO_IO_PREFIX: io
   DAGSTER_MINIO_ACCESS_KEY: minio
   DAGSTER_MINIO_SECRET_KEY: miniosecret
-  DAGSTER_CURRENT_IMAGE: phems-dagster:v106
+  DAGSTER_CURRENT_IMAGE: phems-dagster:v118
   MLFLOW_TRACKING_URI: http://mlflow:5000
   MLFLOW_S3_ENDPOINT_URL: http://minio:9000
   DAGSTER_MLFLOW_ARTIFACT_BUCKET: mlflow-artifacts

@@ -1,6 +1,8 @@
 import time
 import random
 import dagster as dg
+from dagster_k8s import PipesK8sClient
+from dagster_k8s import k8s_job_op
 
 
 @dg.op(

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: codeserver
-          image: phems-dagster:v106
+          image: phems-dagster:v118
           imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",

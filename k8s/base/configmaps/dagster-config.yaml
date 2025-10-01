@@ -18,7 +18,7 @@ data:
       enabled: true
       start_timeout_seconds: 180
       cancel_timeout_seconds: 180
-      max_resume_run_attempts: 3
+      max_resume_run_attempts: 0
       poll_interval_seconds: 60
 
     run_launcher:
@@ -40,7 +40,12 @@ data:
           - name: job
             configMap:
               name: dagster-job-config
+          - name: artifacts-pvc
+            persistentVolumeClaim:
+              claimName: artifacts-pvc
         volume_mounts:
           - name: job
             mountPath: /opt/dagster/home/job_spec.yaml
             subPath: job_spec.yaml
+          - name: artifacts-pvc
+            mountPath: /mnt/dagster/artifacts

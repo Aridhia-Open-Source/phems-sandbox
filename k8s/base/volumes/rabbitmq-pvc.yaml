@@ -4,9 +4,9 @@ metadata:
   name: rabbitmq-pvc
   namespace: dagster
 spec:
+  storageClassName: microk8s-hostpath
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 100Mi
-  storageClassName: microk8s-hostpath

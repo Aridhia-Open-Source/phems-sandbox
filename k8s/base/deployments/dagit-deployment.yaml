@@ -15,7 +15,7 @@
       spec:
         containers:
           - name: dagit
-            image: phems-dagster:v106
+            image: phems-dagster:v118
             imagePullPolicy: Never
             command: [
               "dagster-webserver",
