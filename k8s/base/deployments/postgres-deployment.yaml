@@ -13,6 +13,7 @@ spec:
       labels:
         app: postgres
     spec:
+      serviceAccountName: dagster-user-code
       containers:
         - name: postgres
           image: postgres:14

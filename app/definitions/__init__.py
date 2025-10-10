@@ -14,6 +14,6 @@ defs = dg.Definitions(
     executor=celery_k8s_job_executor,
     resources={
         "io_manager": minio.io_manager,
-        "k8s_pipes_client": PipesK8sClient(),
+        "k8s_pipes_client": PipesK8sClient(poll_interval=5.0),
     },
 )

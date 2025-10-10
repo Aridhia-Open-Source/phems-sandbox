@@ -10,10 +10,11 @@ MNT_BASE_PATH = "/mnt/dagster/artifacts"
 def main():
     argv = sys.argv[1:]
     print(f"argv: {argv}")
-    mock_results()
+    write_results()
+    return 0
 
 
-def mock_results():
+def write_results():
     task_id = os.environ['TASK_ID']
     output_dir = f"{MNT_BASE_PATH}/{task_id}"
     os.makedirs(output_dir, exist_ok=True)
@@ -22,7 +23,7 @@ def mock_results():
         filepath = f"{output_dir}/result_{n}.json"
         print("Creating file:", filepath)
         with open(filepath, 'w') as f:
-            f.write(json.dumps({"status": "success"}))
+            f.write(json.dumps({"result": {"value": n}}))
 
 
 if __name__ == "__main__":

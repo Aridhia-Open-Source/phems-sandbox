@@ -28,6 +28,11 @@ k8s_pipes_asset_job = dg.define_asset_job(
     selection=dg.AssetSelection.assets('k8s_pipes_asset').upstream(),
 )
 
+example_logging_asset_job = dg.define_asset_job(
+    name='example_logging_asset_job',
+    selection=dg.AssetSelection.assets('example_logging_asset').upstream(),
+)
+
 asset_jobs = [
     example_op_job,
     example_complex_asset_job,
@@ -35,4 +40,5 @@ asset_jobs = [
     wine_quality_asset_job,
     hourly_wine_quality_asset_job,
     k8s_pipes_asset_job,
+    example_logging_asset_job
 ]

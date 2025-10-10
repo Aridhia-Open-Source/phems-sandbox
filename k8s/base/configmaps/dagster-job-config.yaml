@@ -15,10 +15,11 @@ data:
           labels:
             app: worker
         spec:
+          serviceAccountName: dagster-user-code
           restartPolicy: Never
           containers:
             - name: worker
-              image: phems-dagster:v118
+              image: phems-dagster:v159
               command: [
                 "dagster-celery", "worker",
                 "--app", "app.worker",

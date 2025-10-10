@@ -13,7 +13,7 @@ class MinioManager:
         self.access_key = os.environ['DAGSTER_MINIO_ACCESS_KEY']
         self.secret_key = os.environ['DAGSTER_MINIO_SECRET_KEY']
         self.endpoint_url = os.environ['DAGSTER_MINIO_ENDPOINT']
-        self.region_name = os.environ.get('DAGSTER_MINIO_REGION', 'us-east-1')
+        self.region_name = os.environ['DAGSTER_MINIO_REGION']
 
         self.resource = S3Resource(
             endpoint_url=self.endpoint_url,

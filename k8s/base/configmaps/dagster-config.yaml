@@ -21,6 +21,20 @@ data:
       max_resume_run_attempts: 0
       poll_interval_seconds: 60
 
+    compute_logs:
+      module: logger
+      class: S3ComputeLogManagerExtended
+      config:
+        access_key: minio
+        secret_key: miniosecret
+        endpoint_url: "http://minio:9000"
+        region: "us-east-1"
+        bucket: phems-bucket
+        prefix: "logs"
+        use_ssl: false
+        verify: false
+        upload_interval: 10
+
     run_launcher:
       module: dagster_celery_k8s.launcher
       class: CeleryK8sRunLauncher

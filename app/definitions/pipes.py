@@ -7,11 +7,11 @@ from dagster._core.pipes.client import PipesClientCompletedInvocation
 
 from app.resources.minio import MinioManager
 
-minio = MinioManager()
 
+NAMESPACE = 'dagster'
 PVC_NAME = 'artifacts-pvc'
-DOCKER_IMAGE = 'dagster-pipes-python:v1'
-S3_BASE_PATH = f"s3://{minio.bucket_name}/artifacts"
+DOCKER_IMAGE = 'dagster-pipes-python:v11'
+S3_BASE_PATH = f"s3://{os.environ['DAGSTER_MINIO_BUCKET']}/artifacts"
 MNT_BASE_PATH = os.environ['DAGSTER_ARTIFACT_MOUNT_PATH']
 
 BASE_POD_SPEC = {
@@ -34,15 +34,17 @@ BASE_POD_SPEC = {
             ],
         }
     ],
+    "serviceAccountName": "dagster-user-code",
 }
+
+minio = MinioManager()
 
 
 @dg.asset
 def k8s_pipes_asset(context: dg.AssetExecutionContext, k8s_pipes_client: PipesK8sClient):
     task = K8sPipeAsset(k8s_pipes_client, context)
-    result = task(image=DOCKER_IMAGE)
-    upload_result(context, result)
-    return result.output
+    run = task(image=DOCKER_IMAGE)
+    return run.output
 
 
 class K8sPipeAsset:
@@ -64,10 +66,12 @@ class K8sPipeAsset:
         kwargs.update(image=image, base_pod_spec=BASE_POD_SPEC)
 
         self._log(task_id, "Task Starting")
-        result = self.client.run(context=self.context, **kwargs)
+        result = self.client.run(context=self.context, namespace=NAMESPACE, **kwargs)
         self._log(task_id, "Task Completed")
 
-        return K8sPipesResponse(task_id, image, result)
+        response = K8sPipesResponse(task_id, image, result)
+        upload_result(self.context, response)
+        return response
 
     def _log(self, task_id: str, message: str):
         self.context.log.info(f"[K8Pipe:{task_id}] {message}")

@@ -13,6 +13,7 @@ spec:
       labels:
         app: daemon
     spec:
+      serviceAccountName: dagster-user-code
       initContainers:
       - name: create-mlflow-db
         image: postgres:15
@@ -35,7 +36,7 @@ spec:
                 key: POSTGRES_PASSWORD
       containers:
         - name: daemon
-          image: phems-dagster:v118
+          image: phems-dagster:v159
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",

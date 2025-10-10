@@ -13,9 +13,10 @@
         labels:
           app: dagit
       spec:
+        serviceAccountName: dagster-user-code
         containers:
           - name: dagit
-            image: phems-dagster:v118
+            image: phems-dagster:v159
             imagePullPolicy: Never
             command: [
               "dagster-webserver",

@@ -5,5 +5,5 @@ RUN pip install dagster-pipes
 COPY entrypoint.py .
 COPY main.py .
 
-ENTRYPOINT ["./entrypoint.py"]
-CMD ["./main.py"]
+ENTRYPOINT [ "python3", "entrypoint.py" ]
+# CMD [ "python3", "main.py" ]
