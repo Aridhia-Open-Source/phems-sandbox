@@ -13,6 +13,7 @@ spec:
       labels:
         app: minio
     spec:
+      serviceAccountName: dagster-user-code
       containers:
         - name: minio
           image: minio/minio:latest

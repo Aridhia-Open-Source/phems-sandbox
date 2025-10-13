@@ -18,8 +18,22 @@ data:
       enabled: true
       start_timeout_seconds: 180
       cancel_timeout_seconds: 180
-      max_resume_run_attempts: 3
+      max_resume_run_attempts: 0
       poll_interval_seconds: 60
+
+    compute_logs:
+      module: logger
+      class: S3ComputeLogManagerExtended
+      config:
+        access_key: minio
+        secret_key: miniosecret
+        endpoint_url: "http://minio:9000"
+        region: "us-east-1"
+        bucket: phems-bucket
+        prefix: "logs"
+        use_ssl: false
+        verify: false
+        upload_interval: 10
 
     run_launcher:
       module: dagster_celery_k8s.launcher
@@ -40,7 +54,12 @@ data:
           - name: job
             configMap:
               name: dagster-job-config
+          - name: artifacts-pvc
+            persistentVolumeClaim:
+              claimName: artifacts-pvc
         volume_mounts:
           - name: job
             mountPath: /opt/dagster/home/job_spec.yaml
             subPath: job_spec.yaml
+          - name: artifacts-pvc
+            mountPath: /mnt/dagster/artifacts

@@ -13,6 +13,7 @@ spec:
       labels:
         app: flower
     spec:
+      serviceAccountName: dagster-user-code
       containers:
         - name: flowermon
           image: mher/flower
