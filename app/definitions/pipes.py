@@ -56,12 +56,19 @@ class K8sPipeAsset:
         self._log(task_id, "Task Completed")
 
         response = K8sPipesResponse(task_id, image, result)
-        upload_result(self.context, response)
+        self._upload_result(response)
         return response
 
+    def _upload_result(self, response: 'K8sPipesResponse'):
+        source_dir = f"{MNT_BASE_PATH}/{response.task_id}"
+        target_prefix = f"artifacts/{response.task_id}"
+        minio.upload_dir(source_dir=source_dir, target_prefix=target_prefix)
+        self._log(response.task_id, f"Uploaded {source_dir} to {target_prefix}")
+
     def _log(self, task_id: str, message: str):
-        self.context.log.info(f"[K8s:{task_id}] {message}")
-        logger.info(f"[K8s:{task_id}] {message}")
+        self.context.log.info(f"[PARENT][DAGSTER][INFO][{task_id}] - {message}")
+        logger.info(f"[PARENT][PYTHON][INFO][{task_id}] - {message}")
+        logger.error(f"[PARENT][PYTHON][ERROR][{task_id}] - {message}")
 
     def _load_base_pod_spec(self):
         return {
@@ -98,10 +105,3 @@ class K8sPipesResponse:
             metadata={'task_id': task_id, 'image': image},
             value={'artifacts': f"{S3_BASE_PATH}/{task_id}"},
         )
-
-
-def upload_result(context: dg.AssetExecutionContext, result: K8sPipesResponse):
-    source_dir = f"{MNT_BASE_PATH}/{result.task_id}"
-    target_prefix = f"artifacts/{result.task_id}"
-    minio.upload_dir(source_dir=source_dir, target_prefix=target_prefix)
-    context.log.info(f"Uploaded {source_dir} to {target_prefix}")

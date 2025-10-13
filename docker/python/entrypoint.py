@@ -4,7 +4,7 @@ import sys
 import subprocess
 import logging
 import time
-# import os
+
 
 from dagster_pipes import open_dagster_pipes
 
@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 def entrypoint():
     with open_dagster_pipes() as _:
         # argv = sys.argv[1:]
-        logger.info("hello world")
-        logger.error("goodbye world")
+        logger.info("[CHILD][PYTHON][INFO] - hello world")
+        logger.error("[CHILD][PYTHON][ERROR] - goodbye world")
         time.sleep(5)
 
         result = subprocess.run(["python3", "main.py"], check=True)

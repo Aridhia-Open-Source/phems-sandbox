@@ -14,7 +14,7 @@ data:
   DAGSTER_MINIO_ACCESS_KEY: minio
   DAGSTER_MINIO_SECRET_KEY: miniosecret
   DAGSTER_MINIO_REGION: us-east-1
-  DAGSTER_CURRENT_IMAGE: phems-dagster:v164
+  DAGSTER_CURRENT_IMAGE: phems-dagster:v174
   MLFLOW_TRACKING_URI: http://mlflow:5000
   MLFLOW_S3_ENDPOINT_URL: http://minio:9000
   DAGSTER_MLFLOW_ARTIFACT_BUCKET: mlflow-artifacts
