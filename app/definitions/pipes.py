@@ -1,5 +1,6 @@
 import os
 import uuid
+import logging
 
 import dagster as dg
 from dagster_k8s import PipesK8sClient
@@ -7,37 +8,17 @@ from dagster._core.pipes.client import PipesClientCompletedInvocation
 
 from app.resources.minio import MinioManager
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+minio = MinioManager()
+
 
 NAMESPACE = 'dagster'
 PVC_NAME = 'artifacts-pvc'
+SERVICE_ACCOUNT_NAME = 'dagster-user-code'
 DOCKER_IMAGE = 'dagster-pipes-python:v11'
 S3_BASE_PATH = f"s3://{os.environ['DAGSTER_MINIO_BUCKET']}/artifacts"
 MNT_BASE_PATH = os.environ['DAGSTER_ARTIFACT_MOUNT_PATH']
-
-BASE_POD_SPEC = {
-    "volumes": [
-        {
-            "name": PVC_NAME,
-            "persistentVolumeClaim": {
-                "claimName": PVC_NAME
-            },
-        }
-    ],
-    "containers": [
-        {
-            "name": "main",  # dagster convention
-            "volumeMounts": [
-                {
-                    "name": PVC_NAME,
-                    "mountPath": MNT_BASE_PATH,
-                }
-            ],
-        }
-    ],
-    "serviceAccountName": "dagster-user-code",
-}
-
-minio = MinioManager()
 
 
 @dg.asset
@@ -61,12 +42,17 @@ class K8sPipeAsset:
 
     def _run_task(self, image, env=None, **kwargs) -> 'K8sPipesResponse':
         task_id = str(uuid.uuid4())
-        kwargs['env'] = env or {}
-        kwargs['env']['TASK_ID'] = task_id
-        kwargs.update(image=image, base_pod_spec=BASE_POD_SPEC)
+        env = {**(env or {}), 'TASK_ID': task_id}
 
         self._log(task_id, "Task Starting")
-        result = self.client.run(context=self.context, namespace=NAMESPACE, **kwargs)
+        result = self.client.run(
+            base_pod_spec=self._load_base_pod_spec(),
+            namespace=NAMESPACE,
+            context=self.context,
+            image=image,
+            env=env,
+            **kwargs
+        )
         self._log(task_id, "Task Completed")
 
         response = K8sPipesResponse(task_id, image, result)
@@ -74,7 +60,32 @@ class K8sPipeAsset:
         return response
 
     def _log(self, task_id: str, message: str):
-        self.context.log.info(f"[K8Pipe:{task_id}] {message}")
+        self.context.log.info(f"[K8s:{task_id}] {message}")
+        logger.info(f"[K8s:{task_id}] {message}")
+
+    def _load_base_pod_spec(self):
+        return {
+            "volumes": [
+                {
+                    "name": PVC_NAME,
+                    "persistentVolumeClaim": {
+                        "claimName": PVC_NAME
+                    },
+                }
+            ],
+            "containers": [
+                {
+                    "name": "main",  # dagster convention
+                    "volumeMounts": [
+                        {
+                            "name": PVC_NAME,
+                            "mountPath": MNT_BASE_PATH,
+                        }
+                    ],
+                }
+            ],
+            "serviceAccountName": SERVICE_ACCOUNT_NAME,
+        }
 
 
 class K8sPipesResponse:

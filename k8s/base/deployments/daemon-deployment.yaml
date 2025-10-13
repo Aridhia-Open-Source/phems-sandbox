@@ -36,7 +36,7 @@ spec:
                 key: POSTGRES_PASSWORD
       containers:
         - name: daemon
-          image: phems-dagster:v159
+          image: phems-dagster:v164
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",

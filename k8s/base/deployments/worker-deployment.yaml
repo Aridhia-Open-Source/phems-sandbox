@@ -15,7 +15,7 @@ spec:
       serviceAccountName: dagster-user-code
       containers:
         - name: worker
-          image: phems-dagster:v159
+          image: phems-dagster:v164
           command: [
             "dagster-celery", "worker", "start",
             "--app", "app.worker",
