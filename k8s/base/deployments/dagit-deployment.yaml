@@ -16,7 +16,7 @@
         serviceAccountName: dagster-user-code
         containers:
           - name: dagit
-            image: phems-dagster:v164
+            image: phems-dagster:v174
             imagePullPolicy: Never
             command: [
               "dagster-webserver",
