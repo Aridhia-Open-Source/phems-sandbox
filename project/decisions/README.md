@@ -8,7 +8,7 @@ An **architecture decision** (AD) is a software design choice that addresses a s
 
 An **architecture decision log** (ADL) is the collection of all ADRs created and maintained for a particular project (or organization).
 
-An **architecturally-significant requirement** (ASR) is a requirement that has a measurable effect on a software system’s architecture.
+An **architecturally-significant requirement** (ASR) is a requirement that has a measurable effect on a software system's architecture.
 
 All these are within the topic of **architecture knowledge management** (AKM).
 

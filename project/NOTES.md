@@ -3,7 +3,7 @@
 This framework is designed as an open-source federated orchestration layer for highly regulated environments such as hospitals.
 It balances operational efficiency with strict compliance requirements through modular components, auditable workflows, and secure execution patterns.
 
-## Dagster as the orchestration engine
+## Dagster Orchestration
 - Unified control plane for teams to build, scale, and observe their AI & data pipelines with confidence using python.
 - Selected for its lightweight operation and strong asset and metadata lineage.
 - Provides a strong framework with flexible configuration for storage, sensors, schedules, logging, etc
