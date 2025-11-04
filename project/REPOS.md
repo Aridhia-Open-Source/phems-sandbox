@@ -1,103 +1,190 @@
-# PHEMS POC E2E
+# ADR:
 
-## Repositories
+
+## Context
+Originally, the system used a single monolithic repository where both governance, and execution logic were all defined together. In this design, merging to the main branch triggered deployment and job execution in one continuous flow. While simple at first, this approach does not provide adequate seperation of concerns and will not scale as the platform is expanded to support multiple projects (use-cases) and federated nodes.
+
+The lack of separation tightly coupled deployment and execution, allowing merges to trigger computation without explicit authorization or review. This created governance risks and operational fragility, since any change could affect all running services or other projects. Decoupling the system into separate repositories for node code logic resolves these problems by introducing clear approval boundaries, improving traceability, enabling modular scaling, and allowing infrastructure and project logic to evolve independently.
+
+
+## Decision
+
+To improve modularity, scalability, and operational clarity, the design has been refactored to introduce two distinct repositories.
+This separation allows multiple projects (Code Repos) to coexist on a single node while maintaining independent CI/CD workflows and governance controls.
+- **Node Repo** defines the shared base infrastructure, resources, and services for the federated node and can support many code locations
+- **Code Repo** defines a single project's compute and governance logic, deployed as one Dagster code location (CodeServer + Worker Pool) on a node.
+
+
+---
+
+## Structure
 
 ### Code Repo
+Defines the **compute** and **governance** layers for a project. z
+Deployed as a single Dagster code location consisting of a CodeServer and Worker Pool.
 
-Defines the **computational logic** for each code location within a node, along with their execution environment and dependencies. \
-i.e. Dagster definitions, Celery config, Dockerfiles, Python requirements, external code, etc.
+**Contents:**
+- **Dagster definitions** (assets, jobs, schedules, sensors, resources)
+- **Execution environments** (Dockerfiles, Python requirements, Celery config)
+- **Governance control flows** (PR-based job submission, result publication)
+- **Infrastructure manifests** (Helm charts, ArgoCD descriptors)
 
-Multiple directories, which are deployed as isolated execution environments (code locations).
-1) **Researcher** raises the PR to create or update a code location.
-2) **GitHub Actions** executes CI pipline (lint, build, test).
-3) **Data Controller** review and merges the PR's to deploy the code locations(s).
-4) **ArgoCD** deploys the individual code location(s) (CodeServer + Worker Pools) to the node.
+---
+
+## Workflows
+
+### Node Repo
+
+#### Code Change
+
+1. **Researcher** raises a PR to modify or extend the project logic.
+2. **GitHub Actions** executes the CI pipeline (lint, build, test).
+3. **Data Controller** reviews and merges the PR to authorize deployment.
+4. **ArgoCD** deploys the updated code location (CodeServer + Worker Pool) to the node.
+
+```mermaid
+---
+config:
+  layout: elk
+  look: classic
+  theme: redux-dark
+---
+sequenceDiagram
+    participant Researcher
+    participant Repo as Code Repo
+    participant GhActions as GitHub Actions
+    participant DataController
+    participant ArgoCD
+    participant Node
+
+    Researcher->>Repo: Raise PR (modify project logic)
+    Repo->>GhActions: Trigger CI (lint, build, test)
+    GhActions-->>Repo: Report CI Status (automated approval gate)
+    DataController->>Repo: Review & Merge PR (manual approval gate)
+    Repo-->>ArgoCD: Notify Deployment (merge to main)
+    ArgoCD->>Node: Deploy Updated Code Location (CodeServer + Worker Pool)
+```
+
+---
+
+#### Job Submission
+
+1. **Researcher** raises a PR to the `jobs/` directory defining a job request.
+2. **GitHub Actions** validates schema and dependencies.
+3. **Data Controller** reviews and merges the PR to authorize execution.
+4. **Node’s Dagster sensor** detects the merge and triggers job execution.
+
+```mermaid
+---
+config:
+  layout: elk
+  look: classic
+  theme: redux-dark
+---
+sequenceDiagram
+    participant Researcher
+    participant Repo as Code Repo
+    participant GhActions as GitHub Actions
+    participant DataController
+    participant Node
+
+    Researcher->>Repo: Raise PR (submit job request)
+    Repo->>GhActions: Trigger CI (validate job definition)
+    GhActions-->>Repo: Report CI Status (automated approval gate)
+    DataController->>Repo: Review & Merge PR (manual approval gate)
+    Repo-->>Node: Node Dagster Sensor Detects Merge & Executes Job
+```
+
+---
+
+#### Result Publication
+
+1. **Node** writes job outputs to internal MinIO storage.
+2. **Node** commits DVC metadata for tracked artifacts and raises a PR.
+3. **GitHub Actions** validates the PR contents (automated gate).
+4. **Data Controller** merges PR to authorize result publication.
+5. **Node** pushes approved artifacts to publication storage via DVC.
+6. **Researchers** retrieve approved results using Git + DVC from the publication remote.
+
+```mermaid
+---
+config:
+  layout: elk
+  look: classic
+  theme: redux-dark
+---
+sequenceDiagram
+    participant Node
+    participant InternalStorage as Internal Storage (MinIO)
+    participant Repo as Code Repo
+    participant GhActions as GitHub Actions
+    participant DataController
+    participant PublicationStorage as Publication Storage
+    participant Researcher
+
+    Node->>InternalStorage: Write Job Outputs (DVC-tracked artifacts)
+    Node->>Repo: Commit DVC Metadata + Raise PR (publish results)
+    Repo->>GhActions: Trigger CI (validate DVC metadata)
+    GhActions-->>Repo: Report CI Status (automated approval gate)
+    DataController->>Repo: Review & Merge PR (manual approval gate)
+    Repo-->>Node: Notify Approval (merge to main)
+    Node->>PublicationStorage: Push Approved DVC Results (publication remote)
+    Researcher->>PublicationStorage: Pull Published Results (Git + DVC)
+```
 
 ---
 
 ### Node Repo
 
-Defines the **shared infrastructure**, such as resources, services, and configuration for a node deployment.  \
-Examples: Helm charts, ArgoCD manifests, Dagster definitions, Celery configuration, and environment settings. \
-Single directory for the core (shared) code location which is deployed as an isolated execution environment (code location).
+### Code Change
 
-**Services**: WebServer, Daemon, MLflow, (CodeServer + Worker Pool) \
-**Resources**: Postgres, RabbitMQ, MinIO
+Defines the **shared infrastructure** and **services** used by all deployed code locations within a node.
 
-1) **Contributor** raises the PR to update the node
-2) **GitHub Actions** executes CI pipline (lint, build, test).
-3) **Maintainer** reviews and merges the PR's to authorize a new node deployment
-4) **ArgoCD** deploys the services, resources, and shared code location (CodeServer + Worker Pool) to the node.
+**Contents:**
+- Helm charts and ArgoCD manifests
+- Resource definitions (Postgres, RabbitMQ, MinIO)
+- Service configurations (WebServer, Daemon, MLflow)
+- Environment variables and secrets management
 
+**Workflow:**
+1. **Contributor** raises a PR to modify node configuration.
+2. **GitHub Actions** executes CI (lint, build, test).
+3. **Maintainer** reviews and merges the PR to authorize deployment.
+4. **ArgoCD** applies the changes to the node environment.
+
+```mermaid
+---
+config:
+  layout: elk
+  look: classic
+  theme: redux-dark
+---
+sequenceDiagram
+    participant Contributor
+    participant Repo as Node Repo
+    participant GhActions as GitHub Actions
+    participant Maintainer
+    participant ArgoCD
+    participant Node
+
+    Contributor->>Repo: Raise PR (update node configuration)
+    Repo->>GhActions: Trigger CI (lint, build, test)
+    GhActions-->>Repo: Report CI Status (automated approval gate)
+    Maintainer->>Repo: Review & Merge PR (manual approval gate)
+    Repo-->>ArgoCD: Notify Deployment (merge to main)
+    ArgoCD->>Node: Deploy Updated Node Services and Resources
+```
 
 ---
 
-### Ctrl Repo
+## Consequences
 
-Provides governance for the node through a git control plane, which allows a data controller to implement approval gates. \
-These approval gates take the form of PR, which are used to both approve job requests and publish their results.
+**Benefits**
+- Decouples shared node infrastructure from project-specific logic.
+- Enables independent deployment lifecycles for each project.
+- Improves governance transparency via PR-gated workflows.
+- Reduces blast radius of project-level changes.
 
-Provides **governance and orchestration** for the node through a Git-based control plane. \
-Enabling a **Data Controller** to manage approval workflows using PR as gates to both **initiate jobs** and **record their results**.
-
-Submit Job:
-1) **Researcher** raises a PR to submit job requests.
-2) **Data Controller** reviews & merges PR's to authorize job execution
-3) **Node** polls for merges to `main` and triggers the corresponding job run
-
-Publish Result:
-1) **Node** stores the job result in **internal storage** (minio)
-2) **Node** raises the pull request with the a commit containing the **DVC** metadata
-4) **Data Controller** reviews and merges the PR to authorize the job result publication
-5) **Node** publishes result to **publication storage** using **DVC** push/pull against the results directory
-6) **Researche** securely pulls the results from the **publication storage** using familiar **GIT** + **DVC** cli tools
-
-
-## DVC
-
-Git is not suitable for large files because it stores every file version in full and lacks built-in deduplication or
-content addressing for binary data. If large files are stored in git, the size of the repository will grow rapidly;
-which results in git operations becoming inefficient and unreliable as the size and number of files scales.
-
-The solution to this is a tool called **[DVC](https://github.com/iterative/dvc)** (Data Version Control). With DVC,
-Git is employed as usual to store and version code (including DVC meta-files as placeholders for data).
-DVC stores data and model files seamlessly in a cache outside of Git, while preserving almost the same user experience as if they were in the repo.
-
-To share and back up the data cache, DVC supports multiple remote storage platforms - any cloud (S3, Azure, Google Cloud, etc.)
-or on-premise network storage (via SSH, for example). When an asset is materialized it is first stored in the internal minio storage bucket, once the data controller has approve the results a new commit is made to transfer the asset to the 'public' storage
-
-- DVC stores metadata in Git - small .dvc files describing where large files live.
-- The actual data lives in DVC remotes (e.g., MinIO, S3, etc.).
-- Multiple DVC remotes can coexist. They are not mirrors automatically; DVC will only push or pull from the one you specify.
-- DVC caches file content by content hash (MD5), which ensures integrity and allows automatic deduplication across remotes.
-- Multiple remotes can also serve as backup of expensive and time consuming experiment results
-
----
-
-### DVC Example
-
-1. **Node-side storage**
-
-    Dagster materialization writes a specific asset (e.g., `outputs/model.pkl`) to **MinIO**. \
-    DVC tracks this asset and pushes it to the `minio` remote:
-    ```bash
-    dvc add outputs/model.pkl
-    dvc push -r minio outputs/model.pkl.dvc
-    ```
-
-2. **Publication via Ctrl Repo or orchestrator**
-
-    Once approved (via PR), the orchestrator or CI process, transfers only the specified asset from local MinIO to external S3.
-    ```bash
-    dvc pull -r minio outputs/model.pkl.dvc
-    dvc push -r s3-pub outputs/model.pkl.dvc
-    ```
-
-3. **Result**
-
-    The targeted DVC-tracked artifact now exists in **both MinIO and S3**, \
-    maintaining consistent version hashes and provenance while avoiding unnecessary transfers.
-
-
-## Notes
-- [Better support for transferring a large number of files already in the cloud into DVC](https://github.com/iterative/dvc/issues/10712)
+**Trade-offs**
+- Slightly increased repository management overhead.
+- Occasional coordination required between node and code deployment schedules when updating shared dependencies.

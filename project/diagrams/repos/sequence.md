@@ -1,4 +1,4 @@
-# Repository Sequences
+# Project Lifecycle 
 
 ## NODE
 

@@ -1,17 +1,16 @@
 # Architecture Overview
 
-This framework is designed as an open-source federated orchestration layer for highly regulated environments such as hospitals.
+The PHEMS framework is designed as an open-source federated orchestration layer for highly regulated environments such as healthcare.
 It balances operational efficiency with strict compliance requirements through modular components, auditable workflows, and secure execution patterns.
 
 ## Dagster Orchestration
 - Unified control plane for teams to build, scale, and observe their AI & data pipelines with confidence using python.
-- Selected for its lightweight operation and strong asset and metadata lineage.
-- Provides a strong framework with flexible configuration for storage, sensors, schedules, logging, etc
-- Provides reproducibility and auditability without the overhead of platforms like Kubeflow or Airflow.
+- Adaptable framework with pluggable configuration for storage, sensors, schedules, logging, etc
+- Provides reproducibility and auditability without the overhead of similar platforms like Kubeflow or Airflow.
 
 ## Workers and Celery
-This design allows horizontal scaling of execution capacity without centralizing compute or exposing sensitive data outside the Federated Node
-- Workers are Kubernetes pods that execute user-defined tasks (ops, jobs, or asset materializations).
+- Allows horizontal scaling of execution capacity without centralizing compute or exposing sensitive data outside the Federated Node
+- Workers are Kubernetes pods that execute user-defined tasks (ops, jobs, or asset materializations) as kubernetes jobs.
 - Celery is a distributed task queue system that executes jobs asynchronously across worker processes using message brokers like RabbitMQ
 
 ## Federated design
@@ -23,19 +22,14 @@ This design allows horizontal scaling of execution capacity without centralizing
 - Integrates with MLflow for experiment tracking and model registry to manage the global model lifecycle.
 
 ## MLflow
-Provides a consistent interface for model lineage, auditing, and reproducibility across distributed environments.
+- Provides a consistent interface for model lineage, auditing, and reproducibility across distributed environments.
 - Tracking Server: aggregates metrics, parameters, and artifacts from federated nodes.
 - Model Registry: versions and manages global models, publishing them to downstream consumers.
 
 ## Federated learning
-hub-and-spoke model ensures collaboration without data centralization, supporting compliance with healthcare regulations.
+- Hub-and-spoke model ensures collaboration without data centralization, supporting compliance with healthcare regulations.
 - Federated nodes perform local training and contribute model updates instead of raw data, preserving privacy.
 - The orchestrator aggregates these updates, validates models, and distributes improved versions back to nodes.
 
 ## GitOps
-Provides a full audit trail with PR approvals, enabling compliance with regulatory standards.
-- ArgoCD ensures all code and configuration changes flow from version control.
-
-## Regulatory alignment
-- Architecture ensures auditability, reproducibility, and controlled collaboration between institutions.
-- Designed specifically to meet the operational and compliance needs of healthcare and other regulated environments.
+TODO: UPDATE THIS
