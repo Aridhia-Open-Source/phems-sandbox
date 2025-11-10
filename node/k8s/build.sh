@@ -12,7 +12,7 @@ TAG_VERSION=$(docker images $IMAGE_NAME --format '{{.Tag}}' \
   | tail -n 1 \
   | sed 's/^v//' \
   | awk '{print "v" $1+1}'
-)
+); TAG_VERSION=${TAG_VERSION:-v1}
 
 # build and tag the docker image
 echo "Building image: $IMAGE_NAME:$TAG_VERSION"

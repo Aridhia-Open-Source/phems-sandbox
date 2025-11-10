@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dagster-config
-  namespace: dagster
+  namespace: code
 data:
   dagster.yaml: |
     python_logs:
@@ -20,7 +20,7 @@ data:
     storage:
       postgres:
         postgres_db:
-          db_name: postgres_db
+          db_name: postgres_db.dagster.svc.cluster.local:
           username: postgres_user
           password: postgres_password
           hostname: postgres
@@ -39,7 +39,7 @@ data:
       config:
         access_key: minio
         secret_key: miniosecret
-        endpoint_url: "http://minio:9000"
+        endpoint_url: "http://minio.dagster.svc.cluster.local:9000"
         region: "us-east-1"
         bucket: phems-bucket
         prefix: "logs"
@@ -53,7 +53,7 @@ data:
       config:
         instance_config_map: celery-config
         dagster_home: /opt/dagster/home
-        job_namespace: dagster
+        job_namespace: code
         load_incluster_config: true
         postgres_password_secret: dagster-postgres-password-secret
         broker:

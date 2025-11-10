@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: artifacts-pvc
-  namespace: dagster
+  namespace: code
 spec:
   storageClassName: microk8s-hostpath
   accessModes:

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: codeserver
-  namespace: dagster
+  namespace: code
 spec:
   replicas: 1
   selector:
@@ -16,17 +16,17 @@ spec:
       serviceAccountName: dagster-user-code
       containers:
         - name: codeserver
-          image: phems-dagster:v174
+          image: phems-code:v1
           imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",
-            "-h", "0.0.0.0",
             "--working-directory", "/opt/dagster/home/",
             "--python-file", "app/definitions",
-            "-p", "4000",
+            "-h", "0.0.0.0",
+            "-p", "4001",
           ]
           ports:
-            - containerPort: 4000
+            - containerPort: 4001
           envFrom:
             - configMapRef:
                 name: dagster-env-config
