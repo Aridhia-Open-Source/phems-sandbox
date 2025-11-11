@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: daemon
-  namespace: dagster
+  namespace: node
 spec:
   replicas: 1
   selector:
@@ -36,7 +36,7 @@ spec:
                 key: POSTGRES_PASSWORD
       containers:
         - name: daemon
-          image: phems-dagster:v186
+          image: phems-node:v23
           command: [
             "dagster-daemon", "run",
             "--working-directory", "/opt/dagster/home/",

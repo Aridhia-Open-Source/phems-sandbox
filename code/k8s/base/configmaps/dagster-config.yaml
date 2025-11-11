@@ -23,7 +23,7 @@ data:
           db_name: postgres_db
           username: postgres_user
           password: postgres_password
-          hostname: postgres.dagster.svc.cluster.local
+          hostname: postgres.node.svc.cluster.local
           port: 5432
 
     run_monitoring:
@@ -39,7 +39,7 @@ data:
       config:
         access_key: minio
         secret_key: miniosecret
-        endpoint_url: "http://minio.dagster.svc.cluster.local:9000"
+        endpoint_url: "http://minio.node.svc.cluster.local:9000"
         region: "us-east-1"
         bucket: phems-bucket
         prefix: "logs"
@@ -51,7 +51,7 @@ data:
       module: dagster_celery_k8s.launcher
       class: CeleryK8sRunLauncher
       config:
-        instance_config_map: celery-config
+        instance_config_map: dagster-config
         dagster_home: /opt/dagster/home
         job_namespace: code
         load_incluster_config: true

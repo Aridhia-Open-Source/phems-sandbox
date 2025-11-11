@@ -4,13 +4,14 @@ from kombu import Queue
 
 broker_url = f"py{os.environ['DAGSTER_CELERY_BROKER_URL']}"
 result_backend = os.environ['DAGSTER_CELERY_BACKEND_URL']
+task_create_missing_queues = True
+task_default_queue = "node"
 
 task_queues = [
     Queue(
-        name='dagster',
-        queue_type='classic',
-        passive=True,
+        name='node',
         durable=True,
+        # passive=True,
         max_priority=10,
     ),
 ]

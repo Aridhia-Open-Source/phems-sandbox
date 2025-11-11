@@ -2,7 +2,7 @@
 
 set -e
 
-IMAGE_NAME="phems-dagster"
+IMAGE_NAME="phems-node"
 
 # kubernetes not picking up changes with the same tag
 # so we get the latest tag and increments by 1, i.e v1 -> v2 (default to v1)

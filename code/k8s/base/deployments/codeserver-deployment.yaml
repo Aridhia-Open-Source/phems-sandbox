@@ -16,7 +16,7 @@ spec:
       serviceAccountName: dagster-user-code
       containers:
         - name: codeserver
-          image: phems-code:v13
+          image: phems-code:v24
           imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",

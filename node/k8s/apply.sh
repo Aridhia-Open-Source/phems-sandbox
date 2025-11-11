@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-NAMESPACE="dagster"
+NAMESPACE="node"
 BASEPATH="k8s/base"
 
 k8s() {
@@ -9,7 +9,7 @@ k8s() {
 }
 
 # apply
-k8s apply -f "$BASEPATH/namespace.yaml"
+microk8s kubectl apply -f "$BASEPATH/namespace.yaml" || true
 k8s apply -f "$BASEPATH/roles"
 k8s apply -f "$BASEPATH/configmaps"
 k8s apply -f "$BASEPATH/secrets"

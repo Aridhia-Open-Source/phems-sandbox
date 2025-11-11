@@ -2,7 +2,7 @@
   kind: Deployment
   metadata:
     name: dagit
-    namespace: dagster
+    namespace: node
   spec:
     replicas: 1
     selector:
@@ -16,7 +16,7 @@
         serviceAccountName: dagster-user-code
         containers:
           - name: dagit
-            image: phems-dagster:v186
+            image: phems-node:v23
             imagePullPolicy: Never
             command: [
               "dagster-webserver",

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pgadmin
-  namespace: dagster
+  namespace: node
 spec:
   replicas: 1
   selector:

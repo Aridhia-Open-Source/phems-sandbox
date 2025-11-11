@@ -19,12 +19,12 @@ data:
           restartPolicy: Never
           containers:
             - name: worker
-              image: phems-code:v13
+              image: phems-code:v24
               command: [
                 "dagster-celery", "worker",
                   "--app", "app.worker",
                   "--loglevel", "INFO",
-                  "--queues", "code"
+                  "--queues", "code",
                   "--concurrency", "1",
               ]
               envFrom:
