@@ -6,5 +6,6 @@ WORKDIR $DAGSTER_HOME
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
 COPY workspace.yaml .
 COPY app app

@@ -1,6 +1,6 @@
 [project]
-name = "phems-sandbox"
-description = "A PHEMS sandbox repository for testing and development purposes."
+name = "phems-node"
+description = "PHEMS R&D Node"
 authors = [{ name = "George Eddie", email = "george.eddie@aridhia.com" }]
 version = "0.1.0"
 requires-python = ">=3.11"

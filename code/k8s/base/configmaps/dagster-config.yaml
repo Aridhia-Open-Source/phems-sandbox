@@ -20,10 +20,10 @@ data:
     storage:
       postgres:
         postgres_db:
-          db_name: postgres_db.dagster.svc.cluster.local:
+          db_name: postgres_db
           username: postgres_user
           password: postgres_password
-          hostname: postgres
+          hostname: postgres.dagster.svc.cluster.local
           port: 5432
 
     run_monitoring:

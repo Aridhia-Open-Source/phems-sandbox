@@ -9,6 +9,6 @@ spec:
     app: codeserver
   ports:
     - protocol: TCP
-      port: 4000
-      targetPort: 4000
+      port: 4001
+      targetPort: 4001
   type: ClusterIP

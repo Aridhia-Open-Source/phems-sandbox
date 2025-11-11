@@ -1,6 +1,8 @@
 load_from:
     - python_module:
+        location_name: node
         module_name: app.definitions
     - grpc_server:
-        host: codeserver.dagster.svc.cluster.local
+        location_name: code
+        host: codeserver.code.svc.cluster.local
         port: 4001

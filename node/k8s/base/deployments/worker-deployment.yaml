@@ -15,12 +15,14 @@ spec:
       serviceAccountName: dagster-user-code
       containers:
         - name: worker
-          image: phems-dagster:v174
+          image: phems-dagster:v186
           command: [
             "dagster-celery", "worker", "start",
-            "--app", "app.worker",
-            "--loglevel", "INFO",
-            "--queue", "dagster"
+              "--app", "app.worker",
+              "--loglevel", "INFO",
+              "--queue", "dagster",
+                "--",
+                "--concurrency", "1",
           ]
           envFrom:
             - configMapRef:

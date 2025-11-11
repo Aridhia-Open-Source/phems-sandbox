@@ -16,14 +16,14 @@ spec:
       serviceAccountName: dagster-user-code
       containers:
         - name: codeserver
-          image: phems-dagster:v174
+          image: phems-dagster:v186
           imagePullPolicy: Never
           command: [
             "dagster", "code-server", "start",
-            "--working-directory", "/opt/dagster/home/",
-            "--python-file", "app/definitions",
-            "-h", "0.0.0.0",
-            "-p", "4000",
+              "--working-directory", "/opt/dagster/home/",
+              "--module-name", "app.definitions",
+              "-h", "0.0.0.0",
+              "-p", "4000",
           ]
           ports:
             - containerPort: 4000
@@ -34,11 +34,7 @@ spec:
             - name: dagster-config
               mountPath: /opt/dagster/home/dagster.yaml
               subPath: dagster.yaml
-            - name: app-volume
-              mountPath: /opt/dagster/home/app
       volumes:
         - name: dagster-config
           configMap:
             name: dagster-config
-        - name: app-volume
-          emptyDir: {}

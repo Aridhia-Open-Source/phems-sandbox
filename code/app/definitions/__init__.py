@@ -9,7 +9,6 @@ minio = MinioManager().setup()
 
 defs = dg.Definitions(
     jobs=jobs.asset_jobs,
-    # schedules=schedules.asset_schedules,
     assets=dg.load_assets_from_modules([pipes, examples]),
     executor=celery_k8s_job_executor,
     resources={
