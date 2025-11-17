@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
     }
 )
 def random_int(context) -> int:
-    return random.randint(context.op_config["x"], context.op_config["y"])
+    return 1
+    # return random.randint(context.op_config["x"], context.op_config["y"])\
 
 
 @dg.op
@@ -23,7 +24,7 @@ def example_op(num: int) -> int:
     print("Example Op")
     print(f"Sleeping for {num} seconds...")
     time.sleep(num)
-    return num + 1
+    return num
 
 
 @dg.graph_asset
@@ -59,12 +60,7 @@ def example_complex_asset(
 @dg.job
 def example_op_job():
     print("Example Job")
-    num = random_int()
-    result = example_op(num)
-    result = example_op(result)
-    result = example_op(result)
-    print(result)
-
+    example_op(example_op(random_int()))
 
 
 @dg.asset

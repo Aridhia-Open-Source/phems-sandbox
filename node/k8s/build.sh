@@ -2,7 +2,13 @@
 
 set -e
 
+if [[ $EUID -ne 0 ]]; then
+    echo "$0 build.sh requires superuser privileges..."
+    exit 2
+fi
+
 IMAGE_NAME="phems-node"
+
 
 # kubernetes not picking up changes with the same tag
 # so we get the latest tag and increments by 1, i.e v1 -> v2 (default to v1)

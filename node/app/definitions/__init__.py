@@ -11,13 +11,17 @@ celery_k8s_executor = celery_k8s_job_executor.configured(
     {"config_source": {"task_default_queue": "node"}}
 )
 
+resources = {
+    "io_manager": minio.io_manager,
+    "k8s_pipes_client": PipesK8sClient(poll_interval=5.0),
+}
+
+asset_defs = dg.load_assets_from_modules([pipes, examples, hackernews, wine_quality])
+
 defs = dg.Definitions(
     jobs=jobs.asset_jobs,
     schedules=schedules.asset_schedules,
-    assets=dg.load_assets_from_modules([pipes, examples, hackernews, wine_quality]),
+    assets=asset_defs,
     executor=celery_k8s_executor,
-    resources={
-        "io_manager": minio.io_manager,
-        "k8s_pipes_client": PipesK8sClient(poll_interval=5.0),
-    },
+    resources=resources,
 )

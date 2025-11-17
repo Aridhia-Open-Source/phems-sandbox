@@ -1,11 +1,36 @@
 import time
 import logging
 import random
-import dagster as dg
-# from dagster_k8s import k8s_job_op # TODO: INVESTIGATE FURTHER
 
+import dagster as dg
+from dagster_celery_k8s import celery_k8s_job_executor
+
+DEFAULT_QUEUE = 'node'
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+celery_k8s_executor = celery_k8s_job_executor.configured(
+    {"config_source": {"task_default_queue": DEFAULT_QUEUE}}
+)
+
+
+@dg.asset(
+    tags={"dagster-celery/queue": DEFAULT_QUEUE}
+)
+def super_simple_asset() -> int:
+    print("Super Simple Asset - START")
+    time.sleep(3)
+    print("Super Simple Asset - END")
+    return 0
+
+
+@dg.job(
+    executor_def=celery_k8s_executor,
+    tags={"dagster-celery/queue": DEFAULT_QUEUE},
+)
+def super_simple_asset_job():
+    print("Super Simple Asset Job - START")
+    super_simple_asset()
+    print("Super Simple Asset Job - END")
 
 
 @dg.op(
@@ -66,13 +91,10 @@ def example_op_job():
     print(result)
 
 
-
 @dg.asset
 def example_logging_asset(context: dg.AssetExecutionContext) -> int:
-    # for _ in range(60):
-    # context.log.info("DAGSTER - INFO: Example Logging Asset")
-    logger.info("STDOUT - INFO: Example Logging Asset")
-    # context.log.error("DAGSTER - ERROR: Example Logging Asset")
-    logger.error("STDERR - ERROR: Example Logging Asset")
-    time.sleep(5)
+    for _ in range(5):
+        context.log.info("DAGSTER - INFO: Example Logging Asset")
+        context.log.error("DAGSTER - ERROR: Example Logging Asset")
+        time.sleep(1)
     return 0

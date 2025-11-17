@@ -2,6 +2,11 @@
 
 set -e
 
+if [[ $EUID -ne 0 ]]; then
+    echo "$0 build.sh requires superuser privileges..."
+    exit 2
+fi
+
 IMAGE_NAME="phems-code"
 
 # kubernetes not picking up changes with the same tag
