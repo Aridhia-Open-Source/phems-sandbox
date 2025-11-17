@@ -9,12 +9,21 @@ export AWS_ACCESS_KEY_ID="minio"
 export AWS_SECRET_ACCESS_KEY="miniosecret"
 export AWS_ENDPOINT_URL="http://localhost:9000"
 
-echo "Listing S3 bucket contents at s3://$AWS_BUCKET_NAME/artifacts/ ..."
+
+# aws s3 get file
+# filepath="f9896ce9-0a72-4916-9f23-248c9f4f4d3e/simulated_data_centre_1/simulated_data_centre_1.json"
+# echo "Copying S3 content $filepath
+# aws s3 cp \
+#     "s3://$AWS_BUCKET_NAME/artifacts/$filepath" \
+#     "./simulated_data_centre_1.json" \
+#     --endpoint-url "$AWS_ENDPOINT_URL"
+
 
 # list s3 objects and group with file counts per directory prefix
-aws s3 ls "s3://$AWS_BUCKET_NAME/artifacts/" \
-    --endpoint-url "$AWS_ENDPOINT_URL" \
-    --recursive
+# echo "Listing S3 bucket contents at s3://$AWS_BUCKET_NAME/artifacts/ ..."
+# aws s3 ls "s3://$AWS_BUCKET_NAME/artifacts/" \
+#     --endpoint-url "$AWS_ENDPOINT_URL" \
+#     --recursive
     # awk '
     # {
     #     # Extract directory prefix (up to the last slash)

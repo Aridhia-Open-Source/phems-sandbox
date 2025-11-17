@@ -15,7 +15,7 @@ RUN julia -e "using Pkg; \
 # Copy Julia code (maintain cache)
 COPY project/src ./src
 
-# copy julia data files (temp solution - ideally use volumes)
+# Copy Julia data files (temp solution - ideally use volumes)
 COPY project/data ./data
 
 ###############################
@@ -37,8 +37,5 @@ COPY --from=julia-stage /root/.julia /root/.julia
 
 # Set PATH to include Julia binaries
 ENV PATH="/usr/local/julia/bin:${PATH}"
-
-# ENV DATA_PATH="/data" \
-#     CKPT_PATH="/ckpt"
 
 ENTRYPOINT ["python3", "entrypoint.py"]

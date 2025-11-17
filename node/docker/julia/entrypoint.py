@@ -15,19 +15,13 @@ logger = logging.getLogger(__name__)
 
 def entrypoint():
     with open_dagster_pipes() as _:
-        # argv = sys.argv[1:]
-        logger.info("[CHILD][PYTHON][INFO] - hello world")
-        logger.error("[CHILD][PYTHON][ERROR] - goodbye world")
-        time.sleep(5)
-
-        result = subprocess.run([
+        return subprocess.run([
             "julia",
             "--project=/project",
             "/project/src/main.jl",
-        ], check=True)
-        return result.returncode
+        ], check=True).returncode
 
 
 if __name__ == "__main__":
-    print("Running entrypoint.py")
+    logger.info("RUNNING entrypoint.py")
     sys.exit(entrypoint())
