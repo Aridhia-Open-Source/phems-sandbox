@@ -15,7 +15,7 @@ export AWS_ENDPOINT_URL="http://localhost:9000"
 # echo "Copying S3 content $filepath
 # aws s3 cp \
 #     "s3://$AWS_BUCKET_NAME/artifacts/$filepath" \
-#     "./simulated_data_centre_1.json" \
+#     "./data/simulated_data_centre_1.json" \
 #     --endpoint-url "$AWS_ENDPOINT_URL"
 
 
