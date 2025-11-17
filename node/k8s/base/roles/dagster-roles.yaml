@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dagster-worker-access
+  namespace: node
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dagster-worker-access-binding
+  namespace: node
+subjects:
+- kind: ServiceAccount
+  name: dagster-user-code
+  namespace: node
+roleRef:
+  kind: Role
+  name: dagster-worker-access
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dagster-user-code
+  namespace: node

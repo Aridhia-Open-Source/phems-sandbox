@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dagster-job-config
+  namespace: code
+data:
+  job_spec.yaml: |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: dagster-job-config
+    spec:
+      template:
+        metadata:
+          labels:
+            app: worker
+        spec:
+          serviceAccountName: dagster-user-code
+          restartPolicy: Never
+          containers:
+            - name: worker
+              image: phems-code:v26
+              command: [
+                "dagster-celery", "worker",
+                  "--app", "app.worker",
+                  "--loglevel", "INFO",
+                  "--queues", "code",
+                  "--concurrency", "1",
+              ]
+              envFrom:
+                - configMapRef:
+                    name: dagster-env-config
+              volumeMounts:
+                - name: dagster-config
+                  mountPath: /opt/dagster/home/dagster.yaml
+                  subPath: dagster.yaml
+                - name: artifacts-pvc
+                  mountPath: /mnt/dagster/artifacts
+          volumes:
+            - name: dagster-config
+              configMap:
+                name: dagster-config
+            - name: artifacts-pvc
+              persistentVolumeClaim:
+                claimName: artifacts-pvc

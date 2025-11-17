@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: codeserver
+  namespace: node
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: codeserver
+  template:
+    metadata:
+      labels:
+        app: codeserver
+    spec:
+      serviceAccountName: dagster-user-code
+      containers:
+        - name: codeserver
+          image: phems-node:v78
+          imagePullPolicy: Never
+          command: [
+            "dagster", "code-server", "start",
+              "--working-directory", "/opt/dagster/home/",
+              "--module-name", "app.definitions",
+              "-h", "0.0.0.0",
+              "-p", "4000",
+          ]
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: dagster-env-config
+          volumeMounts:
+            - name: dagster-config
+              mountPath: /opt/dagster/home/dagster.yaml
+              subPath: dagster.yaml
+      volumes:
+        - name: dagster-config
+          configMap:
+            name: dagster-config

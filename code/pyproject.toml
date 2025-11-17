@@ -1,0 +1,48 @@
+[project]
+name = "phems-code"
+description = "PHEMS R&D Code Location"
+authors = [{ name = "George Eddie", email = "george.eddie@aridhia.com" }]
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "celery",
+    "dagster",
+    "dagster-aws",
+    "dagster-celery-k8s",
+    "dagster-mlflow",
+    "dagster-postgres",
+    "dagster-webserver",
+    "flower",
+    "mlflow",
+    "pandas",
+    "python-dotenv",
+    "pytest",
+    "rabbitmq",
+    "requests",
+    "scikit-learn",
+    "xgboost",
+]
+
+[project.optional-dependencies]
+dev = [
+    "dagster-webserver",
+]
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=42",
+    "wheel"
+]
+
+[tool.setuptools.packages.find]
+where = ["app"]
+exclude = ["app/tests"]
+
+[tool.dagster]
+module_name = "app.definitions"
+code_location_name = "app"
+
+[tool.pytest.ini_options]
+pythonpath = ["app"]
+addopts = "-p no:cacheprovider"
