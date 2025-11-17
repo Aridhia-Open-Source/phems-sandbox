@@ -12,17 +12,19 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 minio = MinioManager()
 
-
 NAMESPACE = 'node'
 PVC_NAME = 'artifacts-pvc'
 SERVICE_ACCOUNT_NAME = 'dagster-user-code'
-DOCKER_IMAGE = 'dagster-pipes-python:v11'
+DOCKER_IMAGE = 'dagster-pipes-julia:v1'
 S3_BASE_PATH = f"s3://{os.environ['DAGSTER_MINIO_BUCKET']}/artifacts"
 MNT_BASE_PATH = os.environ['DAGSTER_ARTIFACT_MOUNT_PATH']
 
 
 @dg.asset
-def k8s_pipes_asset(context: dg.AssetExecutionContext, k8s_pipes_client: PipesK8sClient):
+def julia_k8s_pipes_asset(
+    context: dg.AssetExecutionContext,
+    k8s_pipes_client: PipesK8sClient
+) -> dg.Output:
     task = K8sPipeAsset(k8s_pipes_client, context)
     run = task(image=DOCKER_IMAGE)
     return run.output

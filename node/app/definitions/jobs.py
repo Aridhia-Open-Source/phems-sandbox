@@ -1,7 +1,7 @@
 import dagster as dg
 from app.definitions.examples import example_op_job, super_simple_asset_job
 
-DEFAULT_QUEUE = "node"
+DEFAULT_QUEUE = "dagster"
 
 
 example_complex_asset_job = dg.define_asset_job(
@@ -28,9 +28,9 @@ hourly_wine_quality_asset_job = dg.define_asset_job(
     tags={"dagster-celery/queue": DEFAULT_QUEUE},
 )
 
-k8s_pipes_asset_job = dg.define_asset_job(
-    name='k8s_pipes_asset_job',
-    selection=dg.AssetSelection.assets('k8s_pipes_asset').upstream(),
+julia_k8s_pipes_asset_job = dg.define_asset_job(
+    name='julia_k8s_pipes_asset_job',
+    selection=dg.AssetSelection.assets('julia_k8s_pipes_asset').upstream(),
     tags={"dagster-celery/queue": DEFAULT_QUEUE},
 )
 
@@ -47,6 +47,6 @@ asset_jobs = [
     hacknews_stories_asset_job,
     wine_quality_asset_job,
     hourly_wine_quality_asset_job,
-    k8s_pipes_asset_job,
+    julia_k8s_pipes_asset_job,
     example_logging_asset_job,
 ]

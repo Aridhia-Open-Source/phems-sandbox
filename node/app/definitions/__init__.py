@@ -8,7 +8,7 @@ from app.resources.minio import MinioManager
 minio = MinioManager().setup()
 
 celery_k8s_executor = celery_k8s_job_executor.configured(
-    {"config_source": {"task_default_queue": "node"}}
+    {"config_source": {"task_default_queue": "dagster"}}
 )
 
 resources = {

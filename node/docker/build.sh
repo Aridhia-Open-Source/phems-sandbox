@@ -3,7 +3,7 @@
 set -e
 
 TARGET_DIR=$1
-IMAGE_TAG="v11"
+IMAGE_TAG="v1"
 IMAGE_NAME="dagster-pipes-$TARGET_DIR"
 
 cd "docker/$TARGET_DIR"

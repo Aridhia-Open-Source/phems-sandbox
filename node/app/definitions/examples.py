@@ -5,7 +5,7 @@ import random
 import dagster as dg
 from dagster_celery_k8s import celery_k8s_job_executor
 
-DEFAULT_QUEUE = 'node'
+DEFAULT_QUEUE = 'dagster'
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 celery_k8s_executor = celery_k8s_job_executor.configured(
