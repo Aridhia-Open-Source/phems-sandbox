@@ -1,0 +1,15 @@
+dependencies:
+- name: dagster-user-deployments
+  repository: ""
+  version: 1.12.3
+- name: postgresql
+  repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+  version: 8.1.0
+- name: rabbitmq
+  repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+  version: 6.16.3
+- name: redis
+  repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+  version: 12.7.4
+digest: sha256:105d5199612a301195dab6539dd73e4978d812a2ee7c094dd22d7335f0b66c74
+generated: "2025-11-20T21:19:13.923242101Z"

@@ -1,0 +1,27 @@
+import dagster as dg
+from dagster_k8s import PipesK8sClient
+from dagster_celery_k8s import celery_k8s_job_executor
+
+from app.definitions import jobs, pipes, schedules, examples, hackernews, wine_quality
+from app.resources.minio import MinioManager
+
+minio = MinioManager().setup()
+
+celery_k8s_executor = celery_k8s_job_executor.configured(
+    {"config_source": {"task_default_queue": "dagster"}}
+)
+
+resources = {
+    "io_manager": minio.io_manager,
+    "k8s_pipes_client": PipesK8sClient(poll_interval=5.0),
+}
+
+asset_defs = dg.load_assets_from_modules([pipes, examples, hackernews, wine_quality])
+
+defs = dg.Definitions(
+    jobs=jobs.asset_jobs,
+    schedules=schedules.asset_schedules,
+    assets=asset_defs,
+    executor=celery_k8s_executor,
+    resources=resources,
+)
