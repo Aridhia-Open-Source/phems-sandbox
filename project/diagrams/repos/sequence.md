@@ -1,4 +1,4 @@
-# Project Lifecycle 
+# Project Lifecycle
 
 ## NODE
 
