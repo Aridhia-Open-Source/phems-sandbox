@@ -1,0 +1,8 @@
+{
+  "spec": {
+    "docker_image": "localhost:5001/julia-fn:v32",
+    "env": {
+      "BANG": "BOMB"
+    }
+  }
+}
