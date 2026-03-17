@@ -1,0 +1,9 @@
+{
+  "spec": {
+    "docker_image": "localhost:5001/julia-fn:v31",
+    "env": {
+      "FOO": "BAR",
+      "BAZ": "BOZ"
+    }
+  }
+}
