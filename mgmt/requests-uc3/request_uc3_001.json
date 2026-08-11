@@ -1,0 +1,5 @@
+{
+  "spec": {
+    "image": "localhost:5001/uc3-fn:v1"
+  }
+}
