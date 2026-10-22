@@ -1,0 +1,6 @@
+{
+  "spec": {
+    "name": "pr-20261022183759-32c5ab",
+    "image": "localhost:5001/pypipes-fn:latest"
+  }
+}
