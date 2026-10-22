@@ -1,0 +1,10 @@
+{
+  "branch": "mgmt/results/phems-sandbox/111/3-d6c2c46",
+  "merge_commit_sha": "d6c2c463f183f71b754b7203322398736eb8bc0a",
+  "task_id": 3,
+  "executor_run_id": "688a2e3c-a4ed-4e74-b82e-99f6f0693e39",
+  "trigger_repository_uri": "https://github.com/aridhia-open-source/phems-sandbox",
+  "number": 111,
+  "delivered_at": "2026-10-22T18:39:59Z",
+  "zip_size_bytes": 1478
+}
