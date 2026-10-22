@@ -1,0 +1,5 @@
+{
+  "image": "localhost:5001/pypipes-fn:latest",
+  "dataset_id": 2,
+  "env": {}
+}
