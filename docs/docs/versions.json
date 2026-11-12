@@ -7,11 +7,6 @@
     ]
   },
   {
-    "version": "2.x-preview",
-    "title": "2.x-preview",
-    "aliases": []
-  },
-  {
     "version": "1.x",
     "title": "1.x",
     "aliases": []
