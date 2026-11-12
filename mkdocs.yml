@@ -1,7 +1,11 @@
 site_name: Federated Node
-site_url: https://aridhia-open-source.github.io/phems-sandbox/manual/
+site_url: https://aridhia-open-source.github.io/phems-sandbox/docs/
 repo_url: https://github.com/Aridhia-Open-Source/phems-sandbox
 docs_dir: wiki
+
+plugins:
+  - search
+  - swagger-ui-tag
 
 theme:
   name: material
@@ -66,4 +70,4 @@ nav:
       - Outbound connection only mode: Outbound-connection-only-mode.md
   - Develop:
       - Analytics container development: Analytics-Container-Development.md
-  - API reference: https://aridhia-open-source.github.io/PHEMS_federated_node/
+  - API reference: api/index.md
